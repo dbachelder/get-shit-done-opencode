@@ -79,26 +79,264 @@ GSD provides a structured approach to software development:
 
 ### All Commands
 
-| Command | Description |
-|---------|-------------|
-| `/gsd/help` | Show all available commands |
-| `/gsd/new-project` | Start a new project |
-| `/gsd/research-project` | Research the codebase |
-| `/gsd/create-roadmap` | Create project roadmap |
-| `/gsd/plan-phase N` | Plan a specific phase |
-| `/gsd/execute-plan` | Execute the current plan |
-| `/gsd/progress` | Check progress and next steps |
-| `/gsd/complete-milestone` | Mark milestone complete |
-| `/gsd/discuss-milestone` | Discuss a milestone |
-| `/gsd/new-milestone` | Add a new milestone |
-| `/gsd/discuss-phase` | Discuss a phase |
-| `/gsd/research-phase` | Research a specific phase |
-| `/gsd/list-phase-assumptions` | List assumptions for a phase |
-| `/gsd/add-phase` | Add a new phase |
-| `/gsd/insert-phase` | Insert a phase at position |
-| `/gsd/pause-work` | Pause and save progress |
-| `/gsd/resume-work` | Resume previous work |
-| `/gsd/consider-issues` | Review open issues |
+#### Project Setup
+| Command | Description | When to Use |
+|---------|-------------|-------------|
+| `/gsd/new-project` | Start a new project | **Always first.** Creates PROJECT.md with goals and constraints |
+| `/gsd/research-project` | Research the codebase/domain | For niche domains (3D, ML, audio, games) or unfamiliar tech stacks |
+| `/gsd/create-roadmap` | Create project roadmap | **After new-project.** Breaks work into phases, creates STATE.md |
+
+#### Phase Work (The Main Loop)
+| Command | Description | When to Use |
+|---------|-------------|-------------|
+| `/gsd/discuss-phase` | Discuss a phase | When you need to clarify scope before planning |
+| `/gsd/research-phase` | Research a specific phase | Phase involves unfamiliar libraries or patterns |
+| `/gsd/list-phase-assumptions` | List assumptions for a phase | Before planning to surface hidden assumptions |
+| `/gsd/plan-phase N` | Plan a specific phase | Before starting work on phase N. Creates detailed PLAN.md files |
+| `/gsd/execute-plan` | Execute the current plan | When you have a PLAN.md ready to run |
+
+#### Session Management
+| Command | Description | When to Use |
+|---------|-------------|-------------|
+| `/gsd/progress` | Check progress and next steps | **Start of every session.** Shows status and recommends next action |
+| `/gsd/pause-work` | Pause and save progress | End of a work session, stepping away for a break |
+| `/gsd/resume-work` | Resume previous work | Returning after a break within the same milestone |
+
+#### Adjusting the Plan
+| Command | Description | When to Use |
+|---------|-------------|-------------|
+| `/gsd/add-phase` | Add a new phase at the end | Scope expanded, need more work after existing phases |
+| `/gsd/insert-phase` | Insert a phase at position | Urgent work mid-milestone (e.g., `/gsd/insert-phase 3 "Security fix"` creates 3.1) |
+| `/gsd/consider-issues` | Review deferred issues | Before milestone completion, or when looking for low-priority work |
+
+#### Milestones
+| Command | Description | When to Use |
+|---------|-------------|-------------|
+| `/gsd/discuss-milestone` | Discuss a milestone | Planning scope for the next major deliverable |
+| `/gsd/new-milestone` | Add a new milestone | After completing a milestone, ready to plan the next version |
+| `/gsd/complete-milestone` | Mark milestone complete | All phases done, ready to tag a release (e.g., v1.0.0) |
+
+#### Help
+| Command | Description | When to Use |
+|---------|-------------|-------------|
+| `/gsd/help` | Show all available commands | Anytime you need a refresher |
+
+### Example: Building a CLI Tool
+
+Here's a realistic walkthrough of building a project from start to finish, including the back-and-forth that actually happens.
+
+```
+# Day 1: Project Setup
+
+> /gsd/new-project
+
+GSD asks deep questions about your vision, constraints, and scope.
+You describe: "A CLI tool that syncs dotfiles across machines"
+
+→ Creates .planning/PROJECT.md
+
+> /gsd/create-roadmap
+
+GSD breaks your project into phases based on deliverables.
+
+→ Creates .planning/ROADMAP.md with:
+  - Phase 1: Core sync engine
+  - Phase 2: Config file parsing  
+  - Phase 3: CLI interface
+  - Phase 4: Conflict resolution
+→ Creates .planning/STATE.md (project memory)
+```
+
+```
+# Day 1: Discussing Before Planning
+
+> /gsd/discuss-phase 1
+
+You: "I'm not sure if we should use rsync or build our own sync logic"
+
+GSD explores tradeoffs, asks about your constraints (cross-platform? 
+Windows support?), and helps you decide.
+
+→ Creates .planning/phases/01-core-sync/CONTEXT.md with decisions
+
+> /gsd/list-phase-assumptions 1
+
+GSD surfaces assumptions like:
+- "Assuming sync is one-way (local → remote)"
+- "Assuming SSH access to target machines"
+
+You correct: "No, it needs to be bidirectional"
+
+This context feeds into planning.
+```
+
+```
+# Day 1-2: Planning and Executing
+
+> /gsd/plan-phase 1
+
+GSD creates detailed plans with 2-3 tasks each.
+
+→ Creates .planning/phases/01-core-sync/01-01-PLAN.md
+→ Creates .planning/phases/01-core-sync/01-02-PLAN.md
+
+> /gsd/execute-plan .planning/phases/01-core-sync/01-01-PLAN.md
+
+GSD executes tasks, pausing at checkpoints for your input.
+Commits changes to git after completion.
+
+→ Creates 01-01-SUMMARY.md
+→ Updates STATE.md
+
+> /gsd/execute-plan .planning/phases/01-core-sync/01-02-PLAN.md
+
+→ Phase 1 complete!
+```
+
+```
+# Day 2: Phase Done, But Something's Off
+
+After Phase 2 execution, you realize the config format is too rigid.
+
+> "The YAML config works, but users will want JSON and TOML too"
+
+GSD logs this to ISSUES.md as a deferred enhancement (not blocking).
+
+> /gsd/progress
+
+"Phase 2 complete. 1 issue logged. Phase 3 ready for planning."
+
+You decide to handle it now rather than later:
+
+> /gsd/insert-phase 3 "Multi-format config support"
+
+→ Creates Phase 3.1
+→ Phases 3-4 become 4-5
+
+> /gsd/plan-phase 3.1
+> /gsd/execute-plan ...
+```
+
+```
+# Day 3: Returning to Work
+
+> /gsd/progress
+
+"Phase 3.1 complete. Phase 4 (CLI interface) ready for planning.
+Recommended: /gsd/plan-phase 4"
+
+> /gsd/plan-phase 4
+
+GSD reads STATE.md (remembers all prior context and decisions).
+
+> /gsd/execute-plan ...
+```
+
+```
+# Day 4: Unfamiliar Territory
+
+Phase 5 involves conflict resolution algorithms. You're not sure 
+about the best approach.
+
+> /gsd/research-phase 5
+
+GSD uses Context7 to research diff algorithms, three-way merge 
+strategies, and how other tools (git, syncthing) handle conflicts.
+
+→ Creates .planning/phases/05-conflicts/RESEARCH.md
+
+> /gsd/plan-phase 5
+
+Plans now incorporate research findings.
+```
+
+```
+# Day 5: Urgent Security Issue
+
+Mid-phase, you realize credentials are stored in plaintext.
+
+> /gsd/insert-phase 5 "Security: encrypt stored credentials"
+
+→ Creates Phase 5.1 (runs before you continue Phase 5)
+
+> /gsd/plan-phase 5.1
+> /gsd/execute-plan ...
+
+Then continue where you left off:
+
+> /gsd/progress
+> /gsd/execute-plan .planning/phases/05-conflicts/05-02-PLAN.md
+```
+
+```
+# Day 6: Wrapping Up the Milestone
+
+> /gsd/progress
+
+"All phases complete. Ready for milestone completion."
+
+> /gsd/consider-issues
+
+GSD shows deferred enhancements from ISSUES.md:
+- "Add --dry-run flag" (logged during Phase 3)
+- "Support for .gitignore-style exclusions" (logged during Phase 1)
+
+You decide: dry-run goes in v1.0, exclusions can wait for v2.
+
+> /gsd/insert-phase 6 "Add --dry-run flag"
+> /gsd/plan-phase 6
+> /gsd/execute-plan ...
+
+> /gsd/complete-milestone 1.0.0
+
+→ Archives to MILESTONES.md
+→ Creates git tag v1.0.0
+```
+
+```
+# Starting the Next Milestone
+
+> /gsd/discuss-milestone
+
+Discuss scope for v2.0: cloud backup, team sharing, .gitignore-style 
+exclusions (from ISSUES.md), etc.
+
+> /gsd/new-milestone
+
+→ Creates new milestone in ROADMAP.md
+
+> /gsd/create-roadmap
+
+Generates phases for v2.0, reading from existing PROJECT.md 
+and accumulated context in STATE.md.
+```
+
+### Understanding Milestones vs Phases
+
+**Milestones** are major deliverable boundaries—think version releases or significant project checkpoints.
+
+**Phases** are chunks of work within a milestone—think feature areas or logical groupings.
+
+| Concept | What It Represents | Examples |
+|---------|-------------------|----------|
+| **Milestone** | A shippable release, git tag | MVP (v1.0), "Auth Complete" (v1.1), Public Beta (v2.0) |
+| **Phase** | A logical chunk of work | "Database setup", "User authentication", "API endpoints" |
+| **Plan** | 2-3 atomic tasks within a phase | "Create user model", "Add login endpoint" |
+
+**Rule of thumb:** If it's worth a git tag, it's a milestone. If not, it's probably a phase.
+
+```
+Milestone 1.0 - MVP
+  ├── Phase 1: Foundation (project setup, core models)
+  ├── Phase 2: Core Feature A
+  └── Phase 3: Core Feature B
+
+Milestone 2.0 - Enhanced
+  ├── Phase 4: Feature C
+  └── Phase 5: Polish & Performance
+```
+
+For smaller projects, you might only have **one milestone**—that's fine. Don't over-engineer the structure.
 
 ## Migration from Claude Code
 
