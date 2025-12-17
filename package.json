@@ -1,0 +1,36 @@
+{
+  "name": "get-shit-done-oc",
+  "version": "1.0.0",
+  "description": "A meta-prompting, context engineering and spec-driven development system for OpenCode. Port of Get Shit Done (GSD) by glittercowboy.",
+  "bin": {
+    "get-shit-done-oc": "bin/install.js"
+  },
+  "files": [
+    "bin",
+    "command",
+    "gsd",
+    "agent",
+    "opencode.sample.json",
+    "AGENTS.sample.md",
+    "MIGRATION.md"
+  ],
+  "keywords": [
+    "opencode",
+    "ai",
+    "development",
+    "workflow",
+    "planning",
+    "meta-prompting",
+    "context-engineering",
+    "spec-driven"
+  ],
+  "author": "Original GSD by glittercowboy (https://github.com/glittercowboy/get-shit-done), OpenCode port by Dan",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dbachelder/get-shit-done-opencode"
+  },
+  "engines": {
+    "node": ">=16.7.0"
+  }
+}
