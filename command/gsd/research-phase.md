@@ -51,7 +51,7 @@ For documentation lookups, use Context7 MCP:
 
    - Cross-verify all findings
    - Create RESEARCH.md with actionable ecosystem knowledge
-6. Offer next steps (plan the phase)
+6. Present the "What's next?" menu and STOP. Wait for user to explicitly choose an option before proceeding. Do NOT continue to planning or implementation.
 </process>
 
 <when_to_use>

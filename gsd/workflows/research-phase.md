@@ -384,6 +384,12 @@ What's next?
 3. Review full RESEARCH.md
 4. Done for now
 ```
+
+**STOP HERE. Wait for user response.**
+
+Do NOT proceed to planning or implementation until user explicitly selects an option.
+Do NOT offer alternative next steps beyond this menu.
+Do NOT summarize or suggest what the user should do - just wait.
 </step>
 
 </process>
@@ -405,8 +411,10 @@ What's next?
 - [ ] User knows next steps (plan phase)
 </success_criteria>
 
-<integration_with_planning>
-When /gsd/plan-phase runs after research:
+<reference name="integration_with_planning" note="FOR INFORMATIONAL PURPOSES ONLY - do not execute">
+<!-- This section documents how plan-phase will use research. It is NOT an instruction to proceed. -->
+
+When the user later runs /gsd/plan-phase:
 
 1. plan-phase detects RESEARCH.md exists in phase directory
 2. RESEARCH.md loaded as @context reference
@@ -421,4 +429,4 @@ This produces higher quality plans because the LLM knows:
 - What patterns to follow
 - What mistakes to avoid
 - What NOT to build from scratch
-</integration_with_planning>
+</reference>
