@@ -18,39 +18,33 @@ Purpose: Handle urgent work discovered during execution without renumbering enti
 <process>
 
 <step name="parse_arguments">
-Parse the command arguments:
-- First argument: integer phase number to insert after
-- Remaining arguments: phase description
+Command arguments: $ARGUMENTS
+
+Parse as:
+- First word ($1): integer phase number to insert after
+- Remaining words: phase description
 
 Example: `/gsd/insert-phase 72 Fix critical auth bug`
 → after = 72
 → description = "Fix critical auth bug"
 
-Validation:
+If arguments are empty or only one word provided:
 
-```bash
-if [ $# -lt 2 ]; then
-  echo "ERROR: Both phase number and description required"
-  echo "Usage: /gsd/insert-phase <after> <description>"
-  echo "Example: /gsd/insert-phase 72 Fix critical auth bug"
-  exit 1
-fi
+```
+ERROR: Both phase number and description required
+Usage: /gsd/insert-phase <after> <description>
+Example: /gsd/insert-phase 72 Fix critical auth bug
 ```
 
-Parse first argument as integer:
+Exit.
 
-```bash
-after_phase=$1
-shift
-description="$*"
+Validate the first word is an integer. If not:
 
-# Validate after_phase is an integer
-if ! [[ "$after_phase" =~ ^[0-9]+$ ]]; then
-  echo "ERROR: Phase number must be an integer"
-  exit 1
-fi
+```
+ERROR: Phase number must be an integer
 ```
 
+Exit.
 </step>
 
 <step name="load_roadmap">

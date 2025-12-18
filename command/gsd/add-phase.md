@@ -18,12 +18,9 @@ Purpose: Add planned work discovered during execution that belongs at the end of
 <process>
 
 <step name="parse_arguments">
-Parse the command arguments:
-- All arguments become the phase description
-- Example: `/gsd/add-phase Add authentication` → description = "Add authentication"
-- Example: `/gsd/add-phase Fix critical performance issues` → description = "Fix critical performance issues"
+The phase description is: $ARGUMENTS
 
-If no arguments provided:
+If the description is empty or blank:
 
 ```
 ERROR: Phase description required
