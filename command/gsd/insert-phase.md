@@ -179,7 +179,7 @@ Project state updated: .planning/STATE.md
 
 `/gsd/plan-phase {decimal_phase}`
 
-<sub>`/clear` first → fresh context window</sub>
+_(`/clear` first for fresh context)_
 
 ---
 

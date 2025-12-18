@@ -386,7 +386,7 @@ Created: .planning/phases/${PHASE}-${SLUG}/${PHASE}-RESEARCH.md
 
 `/gsd/plan-phase ${PHASE}`
 
-<sub>`/clear` first → fresh context window</sub>
+_(`/clear` first for fresh context)_
 
 ---
 

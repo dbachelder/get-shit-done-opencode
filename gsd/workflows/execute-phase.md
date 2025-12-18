@@ -1269,7 +1269,7 @@ Summary: .planning/phases/XX-name/{phase}-{plan}-SUMMARY.md
 
 `/gsd/execute-plan .planning/phases/XX-name/{phase}-{next-plan}-PLAN.md`
 
-<sub>`/clear` first → fresh context window</sub>
+_(`/clear` first for fresh context)_
 
 ---
 
@@ -1321,7 +1321,7 @@ This milestone is 100% done.
 
 `/gsd/complete-milestone`
 
-<sub>`/clear` first → fresh context window</sub>
+_(`/clear` first for fresh context)_
 
 ---
 
@@ -1348,7 +1348,7 @@ Phase [Z]: [Name] COMPLETE - all [Y] plans finished.
 
 **To plan directly:** `/gsd/plan-phase [X+1]`
 
-<sub>`/clear` first → fresh context window</sub>
+_(`/clear` first for fresh context)_
 
 ---
 

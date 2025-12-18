@@ -13,7 +13,7 @@ Standard format for presenting next steps after completing a command or workflow
 
 `{command to copy-paste}`
 
-<sub>`/clear` first → fresh context window</sub>
+_(`/clear` first for fresh context)_
 
 ---
 
@@ -46,7 +46,7 @@ Standard format for presenting next steps after completing a command or workflow
 
 `/gsd/execute-plan .planning/phases/02-auth/02-03-PLAN.md`
 
-<sub>`/clear` first → fresh context window</sub>
+_(`/clear` first for fresh context)_
 
 ---
 
@@ -67,11 +67,11 @@ Add note that this is the last plan and what comes after:
 ## ▶ Next Up
 
 **02-03: Refresh Token Rotation** — Add /api/auth/refresh with sliding expiry
-<sub>Final plan in Phase 2</sub>
+_(Final plan in Phase 2)_
 
 `/gsd/execute-plan .planning/phases/02-auth/02-03-PLAN.md`
 
-<sub>`/clear` first → fresh context window</sub>
+_(`/clear` first for fresh context)_
 
 ---
 
@@ -93,7 +93,7 @@ Add note that this is the last plan and what comes after:
 
 `/gsd/plan-phase 2`
 
-<sub>`/clear` first → fresh context window</sub>
+_(`/clear` first for fresh context)_
 
 ---
 
@@ -122,7 +122,7 @@ Show completion status before next action:
 
 `/gsd/plan-phase 3`
 
-<sub>`/clear` first → fresh context window</sub>
+_(`/clear` first for fresh context)_
 
 ---
 
@@ -151,7 +151,7 @@ When there's no clear primary action:
 
 **To research unknowns:** `/gsd/research-phase 3`
 
-<sub>`/clear` first → fresh context window</sub>
+_(`/clear` first for fresh context)_
 
 ---
 ```
@@ -171,7 +171,7 @@ All 4 phases shipped
 
 `/gsd/discuss-milestone`
 
-<sub>`/clear` first → fresh context window</sub>
+_(`/clear` first for fresh context)_
 
 ---
 

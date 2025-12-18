@@ -403,7 +403,7 @@ Next: Phase [X+1] - [Name]
 
 **To plan directly:** `/gsd/plan-phase [X+1]`
 
-<sub>`/clear` first → fresh context window</sub>
+_(`/clear` first for fresh context)_
 
 ---
 
@@ -440,7 +440,7 @@ Phase [X] marked complete.
 
 `/gsd/complete-milestone [version]`
 
-<sub>`/clear` first → fresh context window</sub>
+_(`/clear` first for fresh context)_
 
 ---
 

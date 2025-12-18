@@ -100,7 +100,7 @@ Commands end with a standardized "Next Up" block:
 
 `/gsd/plan-phase 2`
 
-<sub>`/clear` first → fresh context window</sub>
+_(`/clear` first for fresh context)_
 
 ---
 ```

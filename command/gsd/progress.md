@@ -142,7 +142,7 @@ Check if `{phase}-{plan}-PLAN.md` exists for that number.
 
   `/gsd/plan-phase [phase]`
 
-  <sub>`/clear` first → fresh context window</sub>
+  _(`/clear` first for fresh context)_
 
   ---
 
