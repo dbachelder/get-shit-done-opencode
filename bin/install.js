@@ -27,13 +27,18 @@ const LOCAL_PATH_PREFIX = './.opencode/gsd';
 // Parse command line arguments
 function parseArgs() {
   const args = process.argv.slice(2);
+  const result = {
+    location: null,
+    force: args.includes('--force') || args.includes('-f')
+  };
+  
   if (args.includes('--global') || args.includes('-g')) {
-    return 'global';
+    result.location = 'global';
+  } else if (args.includes('--local') || args.includes('-l')) {
+    result.location = 'local';
   }
-  if (args.includes('--local') || args.includes('-l')) {
-    return 'local';
-  }
-  return null;
+  
+  return result;
 }
 
 // Prompt user for installation location
@@ -58,6 +63,53 @@ async function promptForLocation() {
       }
     });
   });
+}
+
+// Prompt user to confirm overwrite
+async function promptForOverwrite(commandDest, gsdDest) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  return new Promise((resolve) => {
+    console.log('\nExisting GSD installation detected:');
+    if (fs.existsSync(commandDest)) {
+      console.log(`  - ${commandDest}`);
+    }
+    if (fs.existsSync(gsdDest)) {
+      console.log(`  - ${gsdDest}`);
+    }
+    console.log('\nThese directories will be REPLACED with the new version.');
+    console.log('(Your project files and other commands are not affected.)');
+    console.log('');
+    
+    rl.question('Continue? (y/N): ', (answer) => {
+      rl.close();
+      const normalized = answer.trim().toLowerCase();
+      resolve(normalized === 'y' || normalized === 'yes');
+    });
+  });
+}
+
+// Recursively delete directory
+function deleteDir(dir) {
+  if (!fs.existsSync(dir)) {
+    return;
+  }
+  
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      deleteDir(fullPath);
+    } else {
+      fs.unlinkSync(fullPath);
+    }
+  }
+  
+  fs.rmdirSync(dir);
 }
 
 // Recursively copy directory
@@ -156,8 +208,11 @@ function printNextSteps(location, packageRoot) {
 async function install() {
   console.log(banner);
   
-  // Determine installation location
-  let location = parseArgs();
+  // Determine installation location and flags
+  const args = parseArgs();
+  let location = args.location;
+  const force = args.force;
+  
   if (!location) {
     location = await promptForLocation();
   }
@@ -165,19 +220,37 @@ async function install() {
   const targetDir = location === 'global' ? GLOBAL_TARGET : LOCAL_TARGET;
   const pathPrefix = location === 'global' ? GLOBAL_PATH_PREFIX : LOCAL_PATH_PREFIX;
   
-  console.log(`\nInstalling to: ${targetDir}`);
-  
   // Get the package root directory
   const packageRoot = path.join(__dirname, '..');
+  
+  // Check for existing installation
+  const commandDest = path.join(targetDir, 'command', 'gsd');
+  const gsdDest = path.join(targetDir, 'gsd');
+  const hasExisting = fs.existsSync(commandDest) || fs.existsSync(gsdDest);
+  
+  // Prompt for confirmation if existing files and not forced
+  if (hasExisting && !force) {
+    const confirmed = await promptForOverwrite(commandDest, gsdDest);
+    if (!confirmed) {
+      console.log('\nInstallation cancelled.');
+      process.exit(0);
+    }
+  }
+  
+  console.log(`\nInstalling to: ${targetDir}`);
   
   // Create target directory
   fs.mkdirSync(targetDir, { recursive: true });
   
   // Copy command/gsd/ to target/command/gsd/
   const commandSrc = path.join(packageRoot, 'command', 'gsd');
-  const commandDest = path.join(targetDir, 'command', 'gsd');
   
   if (fs.existsSync(commandSrc)) {
+    // Clean up old files first
+    if (fs.existsSync(commandDest)) {
+      console.log('  Removing old commands...');
+      deleteDir(commandDest);
+    }
     console.log('  Copying commands...');
     copyDir(commandSrc, commandDest);
     replacePathsInDir(commandDest, pathPrefix);
@@ -185,9 +258,13 @@ async function install() {
   
   // Copy gsd/ to target/gsd/
   const gsdSrc = path.join(packageRoot, 'gsd');
-  const gsdDest = path.join(targetDir, 'gsd');
   
   if (fs.existsSync(gsdSrc)) {
+    // Clean up old files first
+    if (fs.existsSync(gsdDest)) {
+      console.log('  Removing old skill files...');
+      deleteDir(gsdDest);
+    }
     console.log('  Copying skill files...');
     copyDir(gsdSrc, gsdDest);
     replacePathsInDir(gsdDest, pathPrefix);

@@ -33,6 +33,16 @@ npx get-shit-done-oc --global  # or -g
 npx get-shit-done-oc --local   # or -l
 ```
 
+### Upgrading
+
+When upgrading, the installer will **replace** existing GSD files. If you have an existing installation, you'll be prompted to confirm before files are removed.
+
+```bash
+npx get-shit-done-oc --global --force  # Skip confirmation, replace existing files
+```
+
+**Note:** Only GSD-specific directories (`command/gsd/` and `gsd/`) are replaced. Your project files, other commands, and OpenCode config are not affected.
+
 ### Post-Installation: Context7 MCP
 
 For research commands to work, add Context7 MCP to your OpenCode config:
