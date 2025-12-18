@@ -1,0 +1,251 @@
+# Testing Patterns Template
+
+Template for `.planning/codebase/TESTING.md` - captures test framework and patterns.
+
+**Purpose:** Document how tests are written and run. Guide for adding tests that match existing patterns.
+
+---
+
+## File Template
+
+```markdown
+# Testing Patterns
+
+**Analysis Date:** [YYYY-MM-DD]
+
+## Test Framework
+
+**Runner:**
+- [Framework: e.g., "Jest 29.x", "Vitest 1.x"]
+- [Config: e.g., "jest.config.js in project root"]
+
+**Assertion Library:**
+- [Library: e.g., "built-in expect", "chai"]
+- [Matchers: e.g., "toBe, toEqual, toThrow"]
+
+**Run Commands:**
+```bash
+[e.g., "npm test" or "npm run test"]              # Run all tests
+[e.g., "npm test -- --watch"]                     # Watch mode
+[e.g., "npm test -- path/to/file.test.ts"]       # Single file
+[e.g., "npm run test:coverage"]                   # Coverage report
+```
+
+## Test File Organization
+
+**Location:**
+- [Pattern: e.g., "*.test.ts alongside source files"]
+- [Alternative: e.g., "__tests__/ directory" or "separate tests/ tree"]
+
+**Naming:**
+- [Unit tests: e.g., "module-name.test.ts"]
+- [Integration: e.g., "feature-name.integration.test.ts"]
+- [E2E: e.g., "user-flow.e2e.test.ts"]
+
+**Structure:**
+```
+[Show actual directory pattern, e.g.:
+src/
+  lib/
+    utils.ts
+    utils.test.ts
+  services/
+    user-service.ts
+    user-service.test.ts
+]
+```
+
+## Test Structure
+
+**Suite Organization:**
+```typescript
+[Show actual pattern used, e.g.:
+
+describe('ModuleName', () => {
+  describe('functionName', () => {
+    it('should handle success case', () => {
+      // arrange
+      // act
+      // assert
+    });
+
+    it('should handle error case', () => {
+      // test code
+    });
+  });
+});
+]
+```
+
+**Patterns:**
+- [Setup: e.g., "beforeEach for shared setup, avoid beforeAll"]
+- [Teardown: e.g., "afterEach to clean up, restore mocks"]
+- [Structure: e.g., "arrange/act/assert pattern required"]
+
+## Mocking
+
+**Framework:**
+- [Tool: e.g., "Jest built-in mocking", "Vitest vi", "Sinon"]
+- [Import mocking: e.g., "vi.mock() at top of file"]
+
+**Patterns:**
+```typescript
+[Show actual mocking pattern, e.g.:
+
+// Mock external dependency
+vi.mock('./external-service', () => ({
+  fetchData: vi.fn()
+}));
+
+// Mock in test
+const mockFetch = vi.mocked(fetchData);
+mockFetch.mockResolvedValue({ data: 'test' });
+]
+```
+
+**What to Mock:**
+- [e.g., "External APIs, file system, database"]
+- [e.g., "Time/dates (use vi.useFakeTimers)"]
+- [e.g., "Network calls (use mock fetch)"]
+
+**What NOT to Mock:**
+- [e.g., "Pure functions, utilities"]
+- [e.g., "Internal business logic"]
+
+## Fixtures and Factories
+
+**Test Data:**
+```typescript
+[Show pattern for creating test data, e.g.:
+
+// Factory pattern
+function createTestUser(overrides?: Partial<User>): User {
+  return {
+    id: 'test-id',
+    name: 'Test User',
+    email: 'test@example.com',
+    ...overrides
+  };
+}
+
+// Fixture file
+// tests/fixtures/users.ts
+export const mockUsers = [/* ... */];
+]
+```
+
+**Location:**
+- [e.g., "tests/fixtures/ for shared fixtures"]
+- [e.g., "factory functions in test file or tests/factories/"]
+
+## Coverage
+
+**Requirements:**
+- [Target: e.g., "80% line coverage", "no specific target"]
+- [Enforcement: e.g., "CI blocks <80%", "coverage for awareness only"]
+
+**Configuration:**
+- [Tool: e.g., "built-in coverage via --coverage flag"]
+- [Exclusions: e.g., "exclude *.test.ts, config files"]
+
+**View Coverage:**
+```bash
+[e.g., "npm run test:coverage"]
+[e.g., "open coverage/index.html"]
+```
+
+## Test Types
+
+**Unit Tests:**
+- [Scope: e.g., "test single function/class in isolation"]
+- [Mocking: e.g., "mock all external dependencies"]
+- [Speed: e.g., "must run in <1s per test"]
+
+**Integration Tests:**
+- [Scope: e.g., "test multiple modules together"]
+- [Mocking: e.g., "mock external services, use real internal modules"]
+- [Setup: e.g., "use test database, seed data"]
+
+**E2E Tests:**
+- [Framework: e.g., "Playwright for E2E"]
+- [Scope: e.g., "test full user flows"]
+- [Location: e.g., "e2e/ directory separate from unit tests"]
+
+## Common Patterns
+
+**Async Testing:**
+```typescript
+[Show pattern, e.g.:
+
+it('should handle async operation', async () => {
+  const result = await asyncFunction();
+  expect(result).toBe('expected');
+});
+]
+```
+
+**Error Testing:**
+```typescript
+[Show pattern, e.g.:
+
+it('should throw on invalid input', () => {
+  expect(() => functionCall()).toThrow('error message');
+});
+
+// Async error
+it('should reject on failure', async () => {
+  await expect(asyncCall()).rejects.toThrow('error message');
+});
+]
+```
+
+**Snapshot Testing:**
+- [Usage: e.g., "for React components only" or "not used"]
+- [Location: e.g., "__snapshots__/ directory"]
+
+---
+
+*Testing analysis: [date]*
+*Update when test patterns change*
+```
+
+## Guidelines
+
+**What belongs in TESTING.md:**
+- Test framework and runner configuration
+- Test file location and naming patterns
+- Test structure (describe/it, beforeEach patterns)
+- Mocking approach and examples
+- Fixture/factory patterns
+- Coverage requirements
+- How to run tests (commands)
+- Common testing patterns in actual code
+
+**What does NOT belong here:**
+- Specific test cases (defer to actual test files)
+- Technology choices (that's STACK.md)
+- CI/CD setup (that's deployment docs)
+
+**When filling this template:**
+- Check package.json scripts for test commands
+- Find test config file (jest.config.js, vitest.config.ts)
+- Read 3-5 existing test files to identify patterns
+- Look for test utilities in tests/ or test-utils/
+- Check for coverage configuration
+- Document actual patterns used, not ideal patterns
+
+**Useful for phase planning when:**
+- Adding new features (write matching tests)
+- Refactoring (maintain test patterns)
+- Fixing bugs (add regression tests)
+- Understanding verification approach
+- Setting up test infrastructure
+
+**Analysis approach:**
+- Check package.json for test framework and scripts
+- Read test config file for coverage, setup
+- Examine test file organization (collocated vs separate)
+- Review 5 test files for patterns (mocking, structure, assertions)
+- Look for test utilities, fixtures, factories
+- Note any test types (unit, integration, e2e)
+- Document commands for running tests

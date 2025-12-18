@@ -1151,6 +1151,52 @@ EOF
 For commit message conventions and git workflow patterns, see ~/.config/opencode/gsd/references/git-integration.md
 </step>
 
+<step name="update_codebase_map">
+**If .planning/codebase/ exists AND files were modified:**
+
+Check if execution modified significant code:
+
+```bash
+# Get list of code files modified in this plan
+MODIFIED_CODE=$(git diff --name-only HEAD~1 2>/dev/null | grep -E '\.(ts|js|py|go|rs|swift|java)$' | grep -v node_modules)
+echo "Modified code files: $MODIFIED_CODE"
+```
+
+**If significant modifications (>3 code files changed):**
+
+Determine which codebase documents may need update based on what changed:
+
+| Changed Files | Documents to Update |
+|--------------|-------------------|
+| New directories created | STRUCTURE.md |
+| Package dependencies changed | STACK.md, INTEGRATIONS.md |
+| New patterns introduced | ARCHITECTURE.md, CONVENTIONS.md |
+| Test files added/changed | TESTING.md |
+| Config files changed | STACK.md |
+| External service integration | INTEGRATIONS.md |
+
+**Update strategy (incremental, not full remap):**
+
+For each document needing update:
+1. Read current document
+2. Identify what changed (new entries, removed entries, modified sections)
+3. Apply minimal edits to reflect new state
+
+**Commit codebase updates:**
+```bash
+git add .planning/codebase/*.md
+git commit --amend --no-edit  # Include in plan commit
+```
+
+**If no significant changes:**
+Skip codebase update - map is still current.
+
+**If .planning/codebase/ doesn't exist:**
+Skip this step - no codebase map to update.
+
+**Note:** Full remap via `/gsd/map-codebase` is available if incremental updates become stale.
+</step>
+
 <step name="check_phase_issues">
 **Check if issues were created during this phase:**
 
@@ -1215,14 +1261,19 @@ Summary: .planning/phases/XX-name/{phase}-{plan}-SUMMARY.md
 
 [X] of [Y] plans complete for Phase Z.
 
-## To Continue
+---
 
-Run `/clear`, then paste:
-```
-/gsd/execute-plan .planning/phases/XX-name/{phase}-{next-plan}-PLAN.md
-```
+## ▶ Next Up
 
-Other options:
+**{phase}-{next-plan}: [Plan Name]** — [Brief description from PLAN.md objective]
+
+`/gsd/execute-plan .planning/phases/XX-name/{phase}-{next-plan}-PLAN.md`
+
+<sub>`/clear` first → fresh context window</sub>
+
+---
+
+**Also available:**
 - Review what was built before continuing
 ```
 
@@ -1262,15 +1313,20 @@ All [N] phases complete!
 This milestone is 100% done.
 ════════════════════════════════════════
 
-## To Continue
+---
 
-Run `/clear`, then paste:
-```
-/gsd/complete-milestone
-```
+## ▶ Next Up
 
-Other options:
-- Add another phase: `/gsd/add-phase <description>`
+**Complete Milestone** — Archive and tag milestone v[X.Y]
+
+`/gsd/complete-milestone`
+
+<sub>`/clear` first → fresh context window</sub>
+
+---
+
+**Also available:**
+- `/gsd/add-phase <description>` — add another phase
 - Review accomplishments before archiving
 ```
 
@@ -1282,21 +1338,21 @@ Summary: .planning/phases/XX-name/{phase}-{plan}-SUMMARY.md
 
 Phase [Z]: [Name] COMPLETE - all [Y] plans finished.
 
-## To Continue
+---
 
-Run `/clear`, then paste one of:
+## ▶ Next Up
 
-**To discuss Phase [X+1] context first:**
-```
-/gsd/discuss-phase [X+1]
-```
+**Phase [X+1]: [Name]** — [Goal from roadmap]
 
-**To plan Phase [X+1] directly:**
-```
-/gsd/plan-phase [X+1]
-```
+**To discuss context first:** `/gsd/discuss-phase [X+1]`
 
-Other options:
+**To plan directly:** `/gsd/plan-phase [X+1]`
+
+<sub>`/clear` first → fresh context window</sub>
+
+---
+
+**Also available:**
 - Review phase accomplishments before continuing
 ```
 

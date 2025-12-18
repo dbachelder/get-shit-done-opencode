@@ -335,21 +335,21 @@ Milestone v[X.Y] [Name] created:
 - ROADMAP.md updated
 - STATE.md reset for new milestone
 
-## To Continue
+---
 
-Run `/clear`, then paste one of:
+## ▶ Next Up
 
-**To discuss Phase [N] context first:**
-```
-/gsd/discuss-phase [N]
-```
+**Phase [N]: [First Phase Name]** — Start planning the new milestone
 
-**To plan Phase [N] directly:**
-```
-/gsd/plan-phase [N]
-```
+**To discuss context first:** `/gsd/discuss-phase [N]`
 
-Other options:
+**To plan directly:** `/gsd/plan-phase [N]`
+
+<sub>`/clear` first → fresh context window</sub>
+
+---
+
+**Also available:**
 - Review roadmap before continuing
 ```
 </step>

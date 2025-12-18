@@ -29,10 +29,9 @@ This installs GSD commands to `~/.config/opencode/command/gsd/` and skill files 
 ## Quick Start
 
 1. `/gsd/new-project` - Initialize project with brief
-2. `/gsd/research-project` - (Optional) Research domain ecosystem
-3. `/gsd/create-roadmap` - Create roadmap and phases
-4. `/gsd/plan-phase <number>` - Create detailed plan for first phase
-5. `/gsd/execute-plan <path>` - Execute the plan
+2. `/gsd/create-roadmap` - Create roadmap and phases
+3. `/gsd/plan-phase <number>` - Create detailed plan for first phase
+4. `/gsd/execute-plan <path>` - Execute the plan
 
 ## Core Workflow
 
@@ -41,6 +40,16 @@ Initialization → Planning → Execution → Milestone Completion
 ```
 
 ### Project Initialization
+
+**`/gsd/map-codebase`**
+Analyze existing codebase before starting a project (brownfield).
+
+- Spawns parallel explore agents to analyze codebase
+- Creates `.planning/codebase/` with 7 structured documents
+- Documents: STACK, ARCHITECTURE, STRUCTURE, CONVENTIONS, TESTING, INTEGRATIONS, CONCERNS
+- Run before /gsd/new-project for existing codebases
+
+Usage: `/gsd/map-codebase`
 
 **`/gsd/new-project`**
 Initialize new project with brief and configuration.
@@ -51,17 +60,6 @@ Initialize new project with brief and configuration.
 - Commits initialization files to git
 
 Usage: `/gsd/new-project`
-
-**`/gsd/research-project`**
-Research domain ecosystem before creating roadmap.
-
-- Spawns batched subagents to research domain patterns
-- Creates `.planning/research/` with ecosystem findings
-- Uses Context7 MCP for documentation lookups
-- Optional step for niche/complex domains
-- Run after new-project, before create-roadmap
-
-Usage: `/gsd/research-project`
 
 **`/gsd/create-roadmap`**
 Create roadmap and state tracking for initialized project.
@@ -282,8 +280,8 @@ Change anytime by editing `.planning/config.json`
 
 ```
 /gsd/new-project
-/gsd/research-project  # Research domain ecosystem before roadmap
-/gsd/create-roadmap    # Roadmap incorporates research findings
+/gsd/create-roadmap
+/gsd/research-phase 1  # Research before planning niche domain phases
 /gsd/plan-phase 1
 /gsd/execute-plan .planning/phases/01-foundation/01-01-PLAN.md
 ```

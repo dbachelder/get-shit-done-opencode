@@ -96,6 +96,44 @@ Options:
 This ensures planning has full project context.
 </step>
 
+<step name="load_codebase_context">
+Check if codebase map exists:
+
+```bash
+ls .planning/codebase/*.md 2>/dev/null
+```
+
+**If .planning/codebase/ exists:**
+
+Determine which codebase documents are relevant based on phase goal:
+
+| Phase Keywords | Load These Documents |
+|----------------|---------------------|
+| UI, frontend, components, layout | CONVENTIONS.md, STRUCTURE.md |
+| API, backend, endpoints, routes | ARCHITECTURE.md, CONVENTIONS.md |
+| database, schema, models, migration | ARCHITECTURE.md, STACK.md |
+| testing, tests, coverage | TESTING.md, CONVENTIONS.md |
+| integration, external, API, service | INTEGRATIONS.md, STACK.md |
+| refactor, cleanup, debt | CONCERNS.md, ARCHITECTURE.md |
+| setup, config, infrastructure | STACK.md, STRUCTURE.md |
+| (default - load minimal set) | STACK.md, ARCHITECTURE.md |
+
+Read the relevant documents and summarize key constraints for this phase:
+- From STACK.md: Technologies that must be used
+- From ARCHITECTURE.md: Patterns that must be followed
+- From CONVENTIONS.md: Code style requirements
+- From CONCERNS.md: Issues to avoid or address
+
+**Add to planning context:**
+Track codebase constraints for inclusion in PLAN.md context section:
+- Which documents loaded
+- Key constraints extracted
+- Patterns to follow
+
+**If .planning/codebase/ doesn't exist:**
+Skip this step - no codebase map available.
+</step>
+
 <step name="identify_phase">
 Check roadmap for phases:
 ```bash
@@ -730,14 +768,19 @@ After completion, create `.planning/phases/XX-name/{phase}-{plan}-SUMMARY.md`
 Phase plan created: .planning/phases/XX-name/{phase}-01-PLAN.md
 [X] tasks defined.
 
-## To Continue
+---
 
-Run `/clear`, then paste:
-```
-/gsd/execute-plan .planning/phases/XX-name/{phase}-01-PLAN.md
-```
+## ▶ Next Up
 
-Other options:
+**{phase}-01: [Plan Name]** — [Brief description from objective]
+
+`/gsd/execute-plan .planning/phases/XX-name/{phase}-01-PLAN.md`
+
+<sub>`/clear` first → fresh context window</sub>
+
+---
+
+**Also available:**
 - Review/adjust tasks before executing
 ```
 
@@ -751,14 +794,19 @@ Phase plans created:
 
 Total: [X] tasks across [Y] focused plans.
 
-## To Continue
+---
 
-Run `/clear`, then paste:
-```
-/gsd/execute-plan .planning/phases/XX-name/{phase}-01-PLAN.md
-```
+## ▶ Next Up
 
-Other options:
+**{phase}-01: [Subsystem name]** — Execute first plan of this phase
+
+`/gsd/execute-plan .planning/phases/XX-name/{phase}-01-PLAN.md`
+
+<sub>`/clear` first → fresh context window</sub>
+
+---
+
+**Also available:**
 - Review/adjust tasks before executing
 ```
 </step>

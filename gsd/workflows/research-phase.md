@@ -378,11 +378,22 @@ Created: .planning/phases/${PHASE}-${SLUG}/${PHASE}-RESEARCH.md
 
 **Confidence:** [HIGH/MEDIUM/LOW] - [brief reason]
 
-What's next?
-1. Plan this phase (/gsd/plan-phase ${PHASE}) - RESEARCH.md will be loaded automatically
-2. Dig deeper - Research specific areas more thoroughly
-3. Review full RESEARCH.md
-4. Done for now
+---
+
+## ▶ Next Up
+
+**Phase ${PHASE}: ${PHASE_NAME}** — Plan this phase with research loaded
+
+`/gsd/plan-phase ${PHASE}`
+
+<sub>`/clear` first → fresh context window</sub>
+
+---
+
+**Also available:**
+- Dig deeper — Research specific areas more thoroughly
+- Review full RESEARCH.md
+- Done for now
 ```
 
 **STOP HERE. Wait for user response.**

@@ -70,8 +70,8 @@ To start a new project:
 
 GSD provides a structured approach to software development:
 
-1. **Project Setup** - `/gsd/new-project` creates a PROJECT.md defining goals and constraints
-2. **Research** - `/gsd/research-project` explores the codebase and gathers context
+1. **Codebase Analysis** (brownfield only) - `/gsd/map-codebase` documents existing code
+2. **Project Setup** - `/gsd/new-project` creates a PROJECT.md defining goals and constraints
 3. **Roadmap** - `/gsd/create-roadmap` breaks the project into phases and milestones
 4. **Planning** - `/gsd/plan-phase N` creates detailed execution plans for each phase
 5. **Execution** - `/gsd/execute-plan` runs the plan with focused context
@@ -82,8 +82,8 @@ GSD provides a structured approach to software development:
 #### Project Setup
 | Command | Description | When to Use |
 |---------|-------------|-------------|
+| `/gsd/map-codebase` | Analyze existing codebase | **For brownfield projects.** Creates codebase docs before planning |
 | `/gsd/new-project` | Start a new project | **Always first.** Creates PROJECT.md with goals and constraints |
-| `/gsd/research-project` | Research the codebase/domain | For niche domains (3D, ML, audio, games) or unfamiliar tech stacks |
 | `/gsd/create-roadmap` | Create project roadmap | **After new-project.** Breaks work into phases, creates STATE.md |
 
 #### Phase Work (The Main Loop)
@@ -121,9 +121,9 @@ GSD provides a structured approach to software development:
 |---------|-------------|-------------|
 | `/gsd/help` | Show all available commands | Anytime you need a refresher |
 
-### Example: Building a CLI Tool
+### Example: Greenfield Project (CLI Tool)
 
-Here's a realistic walkthrough of building a project from start to finish, including the back-and-forth that actually happens.
+Here's a realistic walkthrough of building a new project from scratch.
 
 ```
 # Day 1: Project Setup
@@ -157,7 +157,7 @@ You: "I'm not sure if we should use rsync or build our own sync logic"
 GSD explores tradeoffs, asks about your constraints (cross-platform? 
 Windows support?), and helps you decide.
 
-→ Creates .planning/phases/01-core-sync/CONTEXT.md with decisions
+→ Creates .planning/phases/01-core-sync/01-CONTEXT.md with decisions
 
 > /gsd/list-phase-assumptions 1
 
@@ -208,12 +208,11 @@ GSD logs this to ISSUES.md as a deferred enhancement (not blocking).
 
 You decide to handle it now rather than later:
 
-> /gsd/insert-phase 3 "Multi-format config support"
+> /gsd/insert-phase 2 "Multi-format config support"
 
-→ Creates Phase 3.1
-→ Phases 3-4 become 4-5
+→ Creates Phase 2.1 (inserted after Phase 2)
 
-> /gsd/plan-phase 3.1
+> /gsd/plan-phase 2.1
 > /gsd/execute-plan ...
 ```
 
@@ -222,10 +221,9 @@ You decide to handle it now rather than later:
 
 > /gsd/progress
 
-"Phase 3.1 complete. Phase 4 (CLI interface) ready for planning.
-Recommended: /gsd/plan-phase 4"
+"Phase 2.1 complete. Phase 3 (CLI interface) ready for planning."
 
-> /gsd/plan-phase 4
+> /gsd/plan-phase 3
 
 GSD reads STATE.md (remembers all prior context and decisions).
 
@@ -235,41 +233,23 @@ GSD reads STATE.md (remembers all prior context and decisions).
 ```
 # Day 4: Unfamiliar Territory
 
-Phase 5 involves conflict resolution algorithms. You're not sure 
+Phase 4 involves conflict resolution algorithms. You're not sure 
 about the best approach.
 
-> /gsd/research-phase 5
+> /gsd/research-phase 4
 
 GSD uses Context7 to research diff algorithms, three-way merge 
 strategies, and how other tools (git, syncthing) handle conflicts.
 
-→ Creates .planning/phases/05-conflicts/RESEARCH.md
+→ Creates .planning/phases/04-conflicts/04-RESEARCH.md
 
-> /gsd/plan-phase 5
+> /gsd/plan-phase 4
 
 Plans now incorporate research findings.
 ```
 
 ```
-# Day 5: Urgent Security Issue
-
-Mid-phase, you realize credentials are stored in plaintext.
-
-> /gsd/insert-phase 5 "Security: encrypt stored credentials"
-
-→ Creates Phase 5.1 (runs before you continue Phase 5)
-
-> /gsd/plan-phase 5.1
-> /gsd/execute-plan ...
-
-Then continue where you left off:
-
-> /gsd/progress
-> /gsd/execute-plan .planning/phases/05-conflicts/05-02-PLAN.md
-```
-
-```
-# Day 6: Wrapping Up the Milestone
+# Day 5: Wrapping Up the Milestone
 
 > /gsd/progress
 
@@ -283,8 +263,8 @@ GSD shows deferred enhancements from ISSUES.md:
 
 You decide: dry-run goes in v1.0, exclusions can wait for v2.
 
-> /gsd/insert-phase 6 "Add --dry-run flag"
-> /gsd/plan-phase 6
+> /gsd/add-phase "Add --dry-run flag"
+> /gsd/plan-phase 5
 > /gsd/execute-plan ...
 
 > /gsd/complete-milestone 1.0.0
@@ -303,12 +283,69 @@ exclusions (from ISSUES.md), etc.
 
 > /gsd/new-milestone
 
-→ Creates new milestone in ROADMAP.md
+→ Creates new milestone in ROADMAP.md with new phases
+```
+
+### Example: Brownfield Project (Adding Features to Existing Code)
+
+When you have an existing codebase, start with `/gsd/map-codebase`:
+
+```
+# Day 1: Understanding the Codebase
+
+> /gsd/map-codebase
+
+GSD spawns parallel agents to analyze your codebase:
+- Stack analysis (languages, frameworks, dependencies)
+- Architecture patterns (how code is organized)
+- Testing approach (test structure, coverage)
+- Integrations (APIs, databases, external services)
+- Technical concerns (debt, risks, issues)
+
+→ Creates .planning/codebase/ with 7 documents:
+  - STACK.md, ARCHITECTURE.md, STRUCTURE.md
+  - CONVENTIONS.md, TESTING.md, INTEGRATIONS.md, CONCERNS.md
+
+> /gsd/new-project
+
+GSD detects existing code and offers to use the codebase analysis.
+You describe what you want to add: "User authentication system"
+
+→ Creates .planning/PROJECT.md (incorporates codebase context)
 
 > /gsd/create-roadmap
 
-Generates phases for v2.0, reading from existing PROJECT.md 
-and accumulated context in STATE.md.
+GSD creates phases that respect existing architecture:
+- Knows your stack from STACK.md
+- Follows conventions from CONVENTIONS.md
+- Avoids areas flagged in CONCERNS.md
+
+→ Creates .planning/ROADMAP.md
+→ Creates .planning/STATE.md
+```
+
+```
+# Planning Respects Existing Patterns
+
+> /gsd/plan-phase 1
+
+GSD loads relevant codebase docs based on phase type:
+- For API work: ARCHITECTURE.md, CONVENTIONS.md
+- For database work: ARCHITECTURE.md, STACK.md
+- For UI work: CONVENTIONS.md, STRUCTURE.md
+
+Plans reference existing patterns in your codebase.
+```
+
+```
+# After Execution: Codebase Docs Stay Current
+
+> /gsd/execute-plan ...
+
+If you modify >3 code files, GSD incrementally updates
+the relevant codebase documents (STRUCTURE.md, etc.)
+
+No need to re-run /gsd/map-codebase unless major changes.
 ```
 
 ### Understanding Milestones vs Phases
@@ -357,7 +394,7 @@ For the full migration guide (useful if porting other Claude Code projects), see
 
 For autonomous plan execution, you can use the sample agent included in this package. After running `npx get-shit-done-oc`, find `agent/gsd-execute.sample.md` in the package directory and copy it to your project's `.opencode/agent/` folder.
 
-This agent runs `execute-plan` with `bash: allow` and `edit: allow` permissions, stopping only at checkpoints.
+This agent runs `execute-plan` with permissive tool settings, stopping only at checkpoints.
 
 ## Troubleshooting
 

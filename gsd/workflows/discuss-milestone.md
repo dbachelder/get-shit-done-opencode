@@ -176,12 +176,17 @@ Milestone scope defined:
 
 Ready to create the milestone structure.
 
-## To Continue
+---
 
-Run `/clear`, then paste:
-```
-/gsd/new-milestone
-```
+## ▶ Next Up
+
+**Create Milestone v[X.Y]** — Set up phases and roadmap structure
+
+`/gsd/new-milestone`
+
+<sub>`/clear` first → fresh context window</sub>
+
+---
 ```
 
 Pass context forward by summarizing:

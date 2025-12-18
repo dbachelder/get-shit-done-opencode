@@ -177,14 +177,19 @@ Phase {decimal_phase} inserted after Phase {after_phase}:
 Roadmap updated: {roadmap-path}
 Project state updated: .planning/STATE.md
 
-## To Continue
+---
 
-Run `/clear`, then paste:
-```
-/gsd/plan-phase {decimal_phase}
-```
+## ▶ Next Up
 
-Other options:
+**Phase {decimal_phase}: {Description}** — Plan the inserted urgent phase
+
+`/gsd/plan-phase {decimal_phase}`
+
+<sub>`/clear` first → fresh context window</sub>
+
+---
+
+**Also available:**
 - Review insertion impact: Check if Phase {next_integer} dependencies still make sense
 - Review roadmap: `cat .planning/ROADMAP.md`
 ```

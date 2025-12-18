@@ -228,21 +228,21 @@ Created: .planning/phases/${PHASE}-${SLUG}/${PHASE}-CONTEXT.md
 ## Boundaries
 [What's out of scope]
 
-## To Continue
+---
 
-Run `/clear`, then paste one of:
+## ▶ Next Up
 
-**To research this phase first:**
-```
-/gsd/research-phase ${PHASE}
-```
+**Phase ${PHASE}: ${PHASE_NAME}** — Plan or research this phase
 
-**To plan this phase directly:**
-```
-/gsd/plan-phase ${PHASE}
-```
+**To research first:** `/gsd/research-phase ${PHASE}`
 
-Other options:
+**To plan directly:** `/gsd/plan-phase ${PHASE}`
+
+<sub>`/clear` first → fresh context window</sub>
+
+---
+
+**Also available:**
 - Review/edit CONTEXT.md before continuing
 ```
 

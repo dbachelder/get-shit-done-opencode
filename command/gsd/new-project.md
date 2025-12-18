@@ -28,7 +28,7 @@ Creates `.planning/` with PROJECT.md and config.json.
 
 1. **Abort if project exists:**
    ```bash
-   [ -d .planning ] && echo "ERROR: Project already initialized. Use /gsd/progress" && exit 1
+   [ -f .planning/PROJECT.md ] && echo "ERROR: Project already initialized. Use /gsd/progress" && exit 1
    ```
 
 2. **Initialize git repo in THIS directory** (required even if inside a parent repo):
@@ -42,7 +42,47 @@ Creates `.planning/` with PROJECT.md and config.json.
    fi
    ```
 
-   **You MUST run both bash commands above using the Bash tool before proceeding.**
+3. **Detect existing code (brownfield detection):**
+   ```bash
+   # Check for existing code files
+   CODE_FILES=$(find . -name "*.ts" -o -name "*.js" -o -name "*.py" -o -name "*.go" -o -name "*.rs" -o -name "*.swift" -o -name "*.java" 2>/dev/null | grep -v node_modules | grep -v .git | head -20)
+   HAS_PACKAGE=$([ -f package.json ] || [ -f requirements.txt ] || [ -f Cargo.toml ] || [ -f go.mod ] || [ -f Package.swift ] && echo "yes")
+   HAS_CODEBASE_MAP=$([ -d .planning/codebase ] && echo "yes")
+   echo "CODE_FILES: $CODE_FILES"
+   echo "HAS_PACKAGE: $HAS_PACKAGE"
+   echo "HAS_CODEBASE_MAP: $HAS_CODEBASE_MAP"
+   ```
+
+   **You MUST run all bash commands above using the Bash tool before proceeding.**
+</step>
+
+<step name="brownfield_offer">
+**If existing code detected and .planning/codebase/ doesn't exist:**
+
+Check the results from setup step:
+- If `CODE_FILES` is non-empty OR `HAS_PACKAGE` is "yes"
+- AND `HAS_CODEBASE_MAP` is NOT "yes"
+
+Present:
+
+## Existing Code Detected
+
+I detected existing code in this directory. Would you like to map the codebase first?
+
+1. Map codebase first - Run /gsd/map-codebase to understand existing architecture (Recommended)
+2. Skip mapping - Proceed with project initialization
+
+Reply with a number.
+
+**If "Map codebase first":**
+```
+Run `/gsd/map-codebase` first, then return to `/gsd/new-project`
+```
+Exit command.
+
+**If "Skip mapping":** Continue to question step.
+
+**If no existing code detected OR codebase already mapped:** Continue to question step.
 </step>
 
 <step name="question">
@@ -174,20 +214,19 @@ Project initialized:
 
 - Project: .planning/PROJECT.md
 - Config: .planning/config.json (mode: [chosen mode])
+[If .planning/codebase/ exists:] - Codebase: .planning/codebase/ (7 documents)
 
-## To Continue
+---
 
-Run `/clear`, then paste one of:
+## ▶ Next Up
 
-**For niche/complex domains (recommended):**
-```
-/gsd/research-project
-```
+**Create roadmap** — break project into phases
 
-**To skip research and go straight to planning:**
-```
-/gsd/create-roadmap
-```
+`/gsd/create-roadmap`
+
+<sub>`/clear` first → fresh context window</sub>
+
+---
 ```
 </step>
 

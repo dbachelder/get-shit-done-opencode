@@ -152,11 +152,23 @@ Continue to offer_next.
 Present next steps:
 
 ```
-What's next?
-1. Discuss context (/gsd/discuss-phase ${PHASE}) - Let me ask you questions to build comprehensive context
-2. Plan this phase (/gsd/plan-phase ${PHASE}) - Create detailed execution plans
-3. Re-examine assumptions - I'll analyze again with your corrections
-4. Done for now
+---
+
+## ▶ Next Up
+
+**Phase ${PHASE}: ${PHASE_NAME}** — Continue with planning
+
+**To discuss context first:** `/gsd/discuss-phase ${PHASE}`
+
+**To plan directly:** `/gsd/plan-phase ${PHASE}`
+
+<sub>`/clear` first → fresh context window</sub>
+
+---
+
+**Also available:**
+- Re-examine assumptions — analyze again with your corrections
+- Done for now
 ```
 
 Wait for user selection.

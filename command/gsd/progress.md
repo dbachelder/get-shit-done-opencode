@@ -134,24 +134,24 @@ Check if `{phase}-{plan}-PLAN.md` exists for that number.
 
 - Display:
   ```
-  ## To Continue
+  ---
 
-  Run `/clear`, then paste one of:
+  ## ▶ Next Up
 
-  **See the LLM's assumptions:**
-  ```
-  /gsd/list-phase-assumptions [phase]
-  ```
+  **Phase [N]: [name]** — [goal from roadmap]
 
-  **Discuss context first:**
-  ```
-  /gsd/discuss-phase [phase]
-  ```
+  `/gsd/plan-phase [phase]`
 
-  **Plan directly:**
-  ```
-  /gsd/plan-phase [phase]
-  ```
+  <sub>`/clear` first → fresh context window</sub>
+
+  ---
+
+  **Also available:**
+  - `/gsd/list-phase-assumptions [phase]` — see LLM's assumptions
+  - `/gsd/discuss-phase [phase]` — discuss context first
+  - `/gsd/research-phase [phase]` — for niche domains
+
+  ---
   ```
 
 **If all plans complete for current phase:**

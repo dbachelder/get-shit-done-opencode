@@ -183,21 +183,31 @@ Based on user selection, route to appropriate workflow:
 
 - **Execute plan** → Show command for user to run after clearing:
   ```
-  ## To Continue
+  ---
 
-  Run `/clear`, then paste:
-  ```
-  /gsd/execute-plan [path]
-  ```
+  ## ▶ Next Up
+
+  **{phase}-{plan}: [Plan Name]** — [Brief description]
+
+  `/gsd/execute-plan [path]`
+
+  <sub>`/clear` first → fresh context window</sub>
+
+  ---
   ```
 - **Plan phase** → Show command for user to run after clearing:
   ```
-  ## To Continue
+  ---
 
-  Run `/clear`, then paste:
-  ```
-  /gsd/plan-phase [phase-number]
-  ```
+  ## ▶ Next Up
+
+  **Phase [X]: [Name]** — [Goal from roadmap]
+
+  `/gsd/plan-phase [phase-number]`
+
+  <sub>`/clear` first → fresh context window</sub>
+
+  ---
   ```
 - **Transition** → ./transition.md
 - **Review issues** → Read ISSUES.md, present summary

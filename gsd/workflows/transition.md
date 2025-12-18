@@ -393,21 +393,21 @@ Phase [X] marked complete.
 
 Next: Phase [X+1] - [Name]
 
-## To Continue
+---
 
-Run `/clear`, then paste one of:
+## ▶ Next Up
 
-**To discuss Phase [X+1] context first:**
-```
-/gsd/discuss-phase [X+1]
-```
+**Phase [X+1]: [Name]** — [Goal from roadmap]
 
-**To plan Phase [X+1] directly:**
-```
-/gsd/plan-phase [X+1]
-```
+**To discuss context first:** `/gsd/discuss-phase [X+1]`
 
-Other options:
+**To plan directly:** `/gsd/plan-phase [X+1]`
+
+<sub>`/clear` first → fresh context window</sub>
+
+---
+
+**Also available:**
 - Review roadmap before continuing
 ```
 </if>
@@ -432,14 +432,19 @@ Phase [X] marked complete.
 
 🎉 Milestone [version] is 100% complete - all phases finished!
 
-## To Continue
+---
 
-Run `/clear`, then paste:
-```
-/gsd/complete-milestone [version]
-```
+## ▶ Next Up
 
-Other options:
+**Complete Milestone** — Archive and tag milestone [version]
+
+`/gsd/complete-milestone [version]`
+
+<sub>`/clear` first → fresh context window</sub>
+
+---
+
+**Also available:**
 - Review accomplishments before archiving
 ```
 </if>

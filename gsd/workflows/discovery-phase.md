@@ -261,12 +261,23 @@ Discovery complete: .planning/phases/XX-name/DISCOVERY.md
 Recommendation: [one-liner]
 Confidence: [level]
 
-What's next?
+---
 
-1. Discuss phase context (/gsd/discuss-phase [current-phase])
-2. Create phase plan (/gsd/plan-phase [current-phase])
-3. Refine discovery (dig deeper)
-4. Review discovery
+## ▶ Next Up
+
+**Phase [current-phase]: [Name]** — Plan with discovery findings
+
+**To discuss context first:** `/gsd/discuss-phase [current-phase]`
+
+**To plan directly:** `/gsd/plan-phase [current-phase]`
+
+<sub>`/clear` first → fresh context window</sub>
+
+---
+
+**Also available:**
+- Refine discovery — dig deeper
+- Review discovery
 ```
 
 NOTE: DISCOVERY.md is NOT committed separately. It will be committed with phase completion.
