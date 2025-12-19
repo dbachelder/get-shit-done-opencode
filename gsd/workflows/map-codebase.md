@@ -13,6 +13,9 @@ Each agent has fresh context and focuses on specific aspects. Output is concise 
 
 **Document quality over length:**
 Include enough detail to be useful as reference. Prioritize practical examples (especially code patterns) over arbitrary brevity. A 200-line TESTING.md with real patterns is more valuable than a 74-line summary.
+
+**Always include file paths:**
+Documents are reference material for the LLM when planning/executing. Vague descriptions like "UserService handles users" are not actionable. Always include actual file paths formatted with backticks: `src/services/user.ts`. This allows the LLM to navigate directly to relevant code without re-searching. Do NOT include line numbers (they go stale), just file paths.
 </philosophy>
 
 <process>
@@ -79,6 +82,8 @@ Task tool:
   prompt: |
     Analyze this codebase for technology stack and external integrations.
 
+    IMPORTANT: Always include actual file paths in your findings. Use backtick formatting like `src/config/database.ts`. This makes the output actionable for planning.
+
     Focus areas:
     1. Languages (check file extensions, package manifests)
     2. Runtime environment (Node.js, Python, etc. - check .nvmrc, .python-version, engines field)
@@ -100,6 +105,11 @@ Task tool:
     - STACK.md: Languages, Runtime, Frameworks, Dependencies, Configuration
     - INTEGRATIONS.md: External APIs, Services, Third-party tools
 
+    For each finding, include the file path where you found it. Example:
+    - "TypeScript 5.3 - `package.json`"
+    - "Supabase client - `src/lib/supabase.ts`"
+    - "Stripe integration - `src/services/stripe.ts`, `src/webhooks/stripe.ts`"
+
     If something is not found, note "Not detected" for that category.
 ```
 
@@ -111,6 +121,8 @@ Task tool:
   description: "Analyze codebase architecture and structure"
   prompt: |
     Analyze this codebase architecture and directory structure.
+
+    IMPORTANT: Always include actual file paths in your findings. Use backtick formatting like `src/index.ts`. This makes the output actionable for planning.
 
     Focus areas:
     1. Overall architectural pattern (monolith, microservices, layered, etc.)
@@ -132,6 +144,11 @@ Task tool:
     - ARCHITECTURE.md: Pattern, Layers, Data Flow, Abstractions, Entry Points
     - STRUCTURE.md: Directory layout, Organization, Key locations
 
+    For each finding, include file paths. Examples:
+    - "CLI entry point: `bin/install.js`"
+    - "Service layer: `src/services/*.ts` (UserService, ProjectService)"
+    - "API routes: `src/routes/api/*.ts`"
+
     If something is not clear, provide best-guess interpretation based on code structure.
 ```
 
@@ -143,6 +160,8 @@ Task tool:
   description: "Analyze coding conventions and test patterns"
   prompt: |
     Analyze this codebase for coding conventions and testing practices.
+
+    IMPORTANT: Always include actual file paths in your findings. Use backtick formatting like `vitest.config.ts`. This makes the output actionable for planning.
 
     Focus areas:
     1. Code style (indentation, quotes, semicolons, formatting)
@@ -165,6 +184,11 @@ Task tool:
     - CONVENTIONS.md: Code Style, Naming, Patterns, Documentation
     - TESTING.md: Framework, Structure, Coverage, Tools
 
+    For each finding, include file paths. Examples:
+    - "Prettier config: `.prettierrc`"
+    - "Test pattern: `src/**/*.test.ts` (co-located with source)"
+    - "Example of naming convention: `src/services/user-service.ts`"
+
     Look at actual code files to infer conventions if config files are missing.
 ```
 
@@ -176,6 +200,8 @@ Task tool:
   description: "Identify technical debt and concerns"
   prompt: |
     Analyze this codebase for technical debt, known issues, and areas of concern.
+
+    CRITICAL: Always include actual file paths in your findings. Use backtick formatting like `src/auth/login.ts`. Concerns without file paths are not actionable. For each issue found, specify exactly where it is.
 
     Focus areas:
     1. TODO and FIXME comments
@@ -198,6 +224,11 @@ Task tool:
 
     Return findings for populating:
     - CONCERNS.md: Technical Debt, Issues, Security, Performance, Documentation
+
+    For EVERY concern, include file paths. Examples:
+    - "Direct DB queries in components: `src/pages/Dashboard.tsx`, `src/pages/Profile.tsx`"
+    - "Missing error handling: `src/api/webhook.ts` (Stripe webhook has no try/catch)"
+    - "TODO: 'fix race condition' in `src/services/subscription.ts`"
 
     Be constructive - focus on actionable concerns, not nitpicks.
     If codebase is clean, note that rather than inventing problems.

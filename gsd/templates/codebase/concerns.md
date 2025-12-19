@@ -17,12 +17,14 @@ Template for `.planning/codebase/CONCERNS.md` - captures known issues and areas 
 
 **[Area/Component]:**
 - Issue: [What's the shortcut/workaround]
+- Files: [`path/to/file.ts`, `path/to/other.ts`]
 - Why: [Why it was done this way]
 - Impact: [What breaks or degrades because of it]
 - Fix approach: [How to properly address it]
 
 **[Area/Component]:**
 - Issue: [What's the shortcut/workaround]
+- Files: [`path/to/file.ts`]
 - Why: [Why it was done this way]
 - Impact: [What breaks or degrades because of it]
 - Fix approach: [How to properly address it]
@@ -31,6 +33,7 @@ Template for `.planning/codebase/CONCERNS.md` - captures known issues and areas 
 
 **[Bug description]:**
 - Symptoms: [What happens]
+- Files: [`path/to/file.ts`]
 - Trigger: [How to reproduce]
 - Workaround: [Temporary mitigation if any]
 - Root cause: [If known]
@@ -38,6 +41,7 @@ Template for `.planning/codebase/CONCERNS.md` - captures known issues and areas 
 
 **[Bug description]:**
 - Symptoms: [What happens]
+- Files: [`path/to/file.ts`]
 - Trigger: [How to reproduce]
 - Workaround: [Temporary mitigation if any]
 - Root cause: [If known]
@@ -46,11 +50,13 @@ Template for `.planning/codebase/CONCERNS.md` - captures known issues and areas 
 
 **[Area requiring security care]:**
 - Risk: [What could go wrong]
+- Files: [`path/to/file.ts`]
 - Current mitigation: [What's in place now]
 - Recommendations: [What should be added]
 
 **[Area requiring security care]:**
 - Risk: [What could go wrong]
+- Files: [`path/to/file.ts`]
 - Current mitigation: [What's in place now]
 - Recommendations: [What should be added]
 
@@ -58,12 +64,14 @@ Template for `.planning/codebase/CONCERNS.md` - captures known issues and areas 
 
 **[Slow operation/endpoint]:**
 - Problem: [What's slow]
+- Files: [`path/to/file.ts`]
 - Measurement: [Actual numbers: "500ms p95", "2s load time"]
 - Cause: [Why it's slow]
 - Improvement path: [How to speed it up]
 
 **[Slow operation/endpoint]:**
 - Problem: [What's slow]
+- Files: [`path/to/file.ts`]
 - Measurement: [Actual numbers]
 - Cause: [Why it's slow]
 - Improvement path: [How to speed it up]
@@ -71,12 +79,14 @@ Template for `.planning/codebase/CONCERNS.md` - captures known issues and areas 
 ## Fragile Areas
 
 **[Component/Module]:**
+- Files: [`path/to/file.ts`]
 - Why fragile: [What makes it break easily]
 - Common failures: [What typically goes wrong]
 - Safe modification: [How to change it without breaking]
 - Test coverage: [Is it tested? Gaps?]
 
 **[Component/Module]:**
+- Files: [`path/to/file.ts`]
 - Why fragile: [What makes it break easily]
 - Common failures: [What typically goes wrong]
 - Safe modification: [How to change it without breaking]
@@ -109,6 +119,7 @@ Template for `.planning/codebase/CONCERNS.md` - captures known issues and areas 
 
 **[Untested area]:**
 - What's not tested: [Specific functionality]
+- Files: [`path/to/file.ts`]
 - Risk: [What could break unnoticed]
 - Priority: [High/Medium/Low]
 - Difficulty to test: [Why it's not tested yet]
@@ -141,6 +152,7 @@ Template for `.planning/codebase/CONCERNS.md` - captures known issues and areas 
 - Minor code style issues
 
 **When filling this template:**
+- **Always include file paths** - Concerns without locations are not actionable. Use backticks: `src/file.ts`
 - Be specific with measurements ("500ms p95" not "slow")
 - Include reproduction steps for bugs
 - Suggest fix approaches, not just problems

@@ -115,10 +115,13 @@ Template for `.planning/codebase/ARCHITECTURE.md` - captures conceptual code org
 - Cross-cutting concerns (logging, auth, validation)
 
 **What does NOT belong here:**
-- Specific file paths (that's STRUCTURE.md)
+- Exhaustive file listings (that's STRUCTURE.md)
 - Technology choices (that's STACK.md)
 - Line-by-line code walkthrough (defer to code reading)
 - Implementation details of specific features
+
+**File paths ARE welcome:**
+Include file paths as concrete examples of abstractions. Use backtick formatting: `src/services/user.ts`. This makes the architecture document actionable for the LLM when planning.
 
 **When filling this template:**
 - Read main entry points (index, server, main)

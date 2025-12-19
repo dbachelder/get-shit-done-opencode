@@ -2,7 +2,7 @@
 
 **Created:** 2025-12-17
 **Source:** https://github.com/glittercowboy/get-shit-done
-**Commits since port:** Dec 16 18:26 PST → Dec 17 (all commits from `484257a` through `e409c7f`)
+**Last synced:** 2025-12-19 at commit `8ebae04` (v1.3.8)
 
 ## Overview
 
@@ -279,3 +279,39 @@ Recommended: 1 → 5 → 4 → 6 → 2 → 3 → 7
 - 13 workflows in `gsd/workflows/`
 - 14 templates in `gsd/templates/`
 - 9 references in `gsd/references/`
+
+---
+
+## Sync: 2025-12-19
+
+**Upstream range:** `e409c7f` (v1.3.5, Dec 17) → `8ebae04` (v1.3.8, Dec 18)
+
+### Commits Ported
+
+| Commit | Description |
+|--------|-------------|
+| `b1f9d57` | feat: add file paths to codebase mapping output |
+| `c11b744` | fix: improve incremental codebase map updates |
+| `00623e5` | docs: add brownfield/existing projects section to README |
+
+### Changes Applied
+
+**1. File paths in codebase mapping (`b1f9d57`)**
+- Added philosophy section to `gsd/workflows/map-codebase.md` explaining file path requirement
+- Updated all 4 agent prompts to require file paths in findings
+- Updated `gsd/templates/codebase/architecture.md` with file path guidance
+- Updated `gsd/templates/codebase/concerns.md` to require Files: field for all concerns
+
+**2. Improved incremental codebase updates (`c11b744`)**
+- Rewrote `update_codebase_map` step in `gsd/workflows/execute-phase.md`
+- Removed arbitrary ">3 files" threshold
+- Added specific update triggers by change type
+- Added explicit skip conditions (bug fixes, content changes)
+- Added "file renamed/moved" case
+
+**3. README brownfield section (`00623e5`)**
+- Already present in our README (added during Phase 6 of original port)
+
+### Skipped
+
+- `a990e37`, `5e496e7`, `8ebae04` - Version bump commits (package.json only)

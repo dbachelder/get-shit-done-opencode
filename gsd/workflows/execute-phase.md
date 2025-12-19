@@ -1154,7 +1154,7 @@ For commit message conventions and git workflow patterns, see ~/.config/opencode
 <step name="update_codebase_map">
 **If .planning/codebase/ exists AND files were modified:**
 
-Check if execution modified significant code:
+Check what changed in this plan execution:
 
 ```bash
 # Get list of code files modified in this plan
@@ -1162,34 +1162,53 @@ MODIFIED_CODE=$(git diff --name-only HEAD~1 2>/dev/null | grep -E '\.(ts|js|py|g
 echo "Modified code files: $MODIFIED_CODE"
 ```
 
-**If significant modifications (>3 code files changed):**
+**Determine if codebase docs need updating based on change type:**
 
-Determine which codebase documents may need update based on what changed:
+| Change Type | Update Needed | Action |
+|------------|---------------|--------|
+| New directory created | STRUCTURE.md | Add directory to layout |
+| File renamed/moved | STRUCTURE.md, ARCHITECTURE.md | Update paths |
+| New dependency added | STACK.md | Add to dependencies section |
+| New external service | INTEGRATIONS.md | Add integration details |
+| New architectural pattern | ARCHITECTURE.md | Document pattern |
+| New test pattern | TESTING.md | Add test approach |
+| Config file changed | STACK.md | Update config section |
 
-| Changed Files | Documents to Update |
-|--------------|-------------------|
-| New directories created | STRUCTURE.md |
-| Package dependencies changed | STACK.md, INTEGRATIONS.md |
-| New patterns introduced | ARCHITECTURE.md, CONVENTIONS.md |
-| Test files added/changed | TESTING.md |
-| Config files changed | STACK.md |
-| External service integration | INTEGRATIONS.md |
+**Skip codebase update when:**
+- Only bug fixes (no structural changes)
+- Content-only changes (text, comments, values)
+- Changes within existing patterns (no new patterns introduced)
 
 **Update strategy (incremental, not full remap):**
 
 For each document needing update:
 1. Read current document
-2. Identify what changed (new entries, removed entries, modified sections)
-3. Apply minimal edits to reflect new state
+2. Make single targeted edit to add/update the specific item
+3. Do NOT rewrite entire sections - just add the new entry
+
+**Update format examples:**
+
+Adding new directory to STRUCTURE.md:
+```markdown
+## Directory Purposes
+
++ **api/webhooks/**
++ - Purpose: Webhook handlers for external services
++ - Contains: Stripe, GitHub webhook processors
+```
+
+Adding new dependency to STACK.md:
+```markdown
+**Critical:**
+- existing-dep 1.0 - existing purpose
++ - new-dep 2.0 - why it was added
+```
 
 **Commit codebase updates:**
 ```bash
 git add .planning/codebase/*.md
 git commit --amend --no-edit  # Include in plan commit
 ```
-
-**If no significant changes:**
-Skip codebase update - map is still current.
 
 **If .planning/codebase/ doesn't exist:**
 Skip this step - no codebase map to update.
