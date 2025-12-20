@@ -2,6 +2,16 @@
 
 This project uses the Get Shit Done workflow for spec-driven development.
 
+## Development Install
+
+When working on GSD itself, install changes locally with:
+
+```bash
+echo "1" | node bin/install.js --force
+```
+
+This installs to `~/.config/opencode/` (global). Use `echo "2"` for local install to `./.opencode/`.
+
 ## Upstream Sync
 
 **Last synced:** 2025-12-17

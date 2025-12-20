@@ -115,6 +115,7 @@ GSD provides a structured approach to software development:
 #### Adjusting the Plan
 | Command | Description | When to Use |
 |---------|-------------|-------------|
+| `/gsd/add-issue` | Capture an enhancement idea | Mid-execution idea you don't want to lose but don't want to act on now |
 | `/gsd/add-phase` | Add a new phase at the end | Scope expanded, need more work after existing phases |
 | `/gsd/insert-phase` | Insert a phase at position | Urgent work mid-milestone (e.g., `/gsd/insert-phase 3 "Security fix"` creates 3.1) |
 | `/gsd/consider-issues` | Review deferred issues | Before milestone completion, or when looking for low-priority work |

@@ -180,14 +180,15 @@ Usage: `/gsd/complete-milestone 1.0.0`
 ### Progress Tracking
 
 **`/gsd/progress`**
-Check project status and intelligently route to next action.
+Check project status with full phase table and route to next action.
 
-- Shows visual progress bar and completion percentage
+- Shows comprehensive phase status table with all phases
+- Columns: Phase, Research, Context, Plans, Status, Issues
+- Current phase marked with `►` indicator
+- Decimal phases (5.1, 5.2) shown nested under parent
 - Summarizes recent work from SUMMARY files
-- Displays current position and what's next
-- Lists key decisions and open issues
-- Offers to execute next plan or create it if missing
-- Detects 100% milestone completion
+- Lists open issues with phase assignments
+- Smart routing to next action (execute or plan)
 
 Usage: `/gsd/progress`
 
@@ -212,6 +213,17 @@ Create context handoff when pausing work mid-phase.
 Usage: `/gsd/pause-work`
 
 ### Issue Management
+
+**`/gsd/add-issue <description>`**
+Quickly capture an enhancement idea for future consideration.
+
+- Appends to ISSUES.md in the prescribed format
+- Auto-increments ISS number
+- Infers issue type from description
+- Creates ISSUES.md from template if needed
+- No interruption - continue current work immediately
+
+Usage: `/gsd/add-issue "Add dark mode toggle to settings"`
 
 **`/gsd/consider-issues`**
 Review deferred issues with codebase context.
