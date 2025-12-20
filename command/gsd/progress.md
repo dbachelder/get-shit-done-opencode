@@ -70,13 +70,15 @@ For each phase directory in `.planning/phases/`:
 4. **Count plans:**
    - Find all `*-PLAN.md` files in phase directory
    - Find all `*-SUMMARY.md` files in phase directory
-   - Format: `completed/total` (e.g., `2/3`) or `0` if no plans
+   - Format: `completed/total` (e.g., `2/3`)
+   - Total comes from ROADMAP.md phase details (plans listed there)
+   - If no plans listed in roadmap yet, show `-`
 
 5. **Determine phase status:**
    - `complete` - All plans have summaries
    - `in-progress` - Some plans have summaries, some don't
-   - `planned` - Plans exist but no summaries yet
-   - `not-started` - No plans exist
+   - `planned` - PLAN.md files exist but no summaries yet
+   - `unplanned` - No PLAN.md files created yet (need to run /plan-phase)
 
 6. **Count tagged issues:**
    - Parse ISSUES.md for issues with "Suggested phase: X" matching this phase
@@ -102,10 +104,10 @@ Phase                        Research  Context  Plans  Status       Issues
 ─────────────────────────────────────────────────────────────────────────────
   01 Foundation              -         ✓        2/2    complete     -
   02 Core API                -         -        1/2    in-progress  -
-► 03 WebGL Renderer          needed    -        0/0    not-started  1
-  04 Audio System            done      ✓        0/0    not-started  -
-  05 Polish                  -         -        0/0    not-started  2
-    └─ 05.1 Security fix     -         -        0/0    not-started  -
+► 03 WebGL Renderer          needed    -        0/3    planned      1
+  04 Audio System            done      ✓        0/2    unplanned    -
+  05 Polish                  -         -        0/1    unplanned    2
+    └─ 05.1 Security fix     -         -        0/1    unplanned    -
 
 Progress: 5/10 plans complete (50%)
 ```
@@ -115,7 +117,7 @@ Progress: 5/10 plans complete (50%)
 - `►` marker on current phase (from STATE.md)
 - Decimal phases indented with `└─` prefix
 - Fixed column widths: Phase (28), Research (10), Context (9), Plans (7), Status (13), Issues (6)
-- Plans format: `completed/total` (e.g., `2/3`, `0/3`)
+- Plans format: `completed/total` from ROADMAP.md (e.g., `0/3` = not started, `2/3` = in progress)
 - Progress summary as plain text line below table
 - Use box-drawing character `─` for separator line only
 </step>
