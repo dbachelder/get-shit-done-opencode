@@ -164,28 +164,32 @@ Total: 16 files, 3 plans → consistent quality
 
 <by_subsystem>
 
-**Phase:** "Authentication System"
+**Phase:** "Authentication System" (complex - 6 plans)
 
 **Split:**
 ```
-- 03-01-PLAN.md: Database models (User, Session tables + relations)
-- 03-02-PLAN.md: Auth API (register, login, logout endpoints)
-- 03-03-PLAN.md: Protected routes (middleware, JWT validation)
-- 03-04-PLAN.md: UI components (login form, registration form)
+- 03-01-PLAN.md: Database models (User, Session, RefreshToken tables)
+- 03-02-PLAN.md: Password utilities (hashing, validation, strength checks)
+- 03-03-PLAN.md: Auth API - registration (endpoint, email verification flow)
+- 03-04-PLAN.md: Auth API - login/logout (JWT issuance, refresh tokens)
+- 03-05-PLAN.md: Protected routes (middleware, role-based access)
+- 03-06-PLAN.md: UI components (login, register, forgot password forms)
 ```
 
-Each plan: 2-3 tasks, single subsystem, clean commits.
+Each plan: 2-3 tasks, single subsystem, clean commits. Complex domains warrant more plans.
 </by_subsystem>
 
 <by_dependency>
 
-**Phase:** "Payment Integration"
+**Phase:** "Payment Integration" (moderate - 5 plans)
 
 **Split:**
 ```
-- 04-01-PLAN.md: Stripe setup (webhook endpoints via API, env vars, test mode)
-- 04-02-PLAN.md: Subscription logic (plans, checkout, customer portal)
-- 04-03-PLAN.md: Frontend integration (pricing page, payment flow)
+- 04-01-PLAN.md: Stripe setup (SDK, env vars, test mode config)
+- 04-02-PLAN.md: Webhook infrastructure (endpoint, signature verification, event routing)
+- 04-03-PLAN.md: Subscription logic (plans, pricing tiers, trial handling)
+- 04-04-PLAN.md: Checkout flow (session creation, success/cancel handling)
+- 04-05-PLAN.md: Customer portal (billing management, invoice history UI)
 ```
 
 Later plans depend on earlier completion. Sequential execution, fresh context each time.
@@ -193,32 +197,42 @@ Later plans depend on earlier completion. Sequential execution, fresh context ea
 
 <by_complexity>
 
-**Phase:** "Dashboard Buildout"
+**Phase:** "Analytics Dashboard" (complex - 7 plans)
 
 **Split:**
 ```
 - 05-01-PLAN.md: Layout shell (simple: sidebar, header, routing)
-- 05-02-PLAN.md: Data fetching (moderate: TanStack Query setup, API integration)
-- 05-03-PLAN.md: Data visualization (complex: charts, tables, real-time updates)
+- 05-02-PLAN.md: Data layer (TanStack Query setup, API client, caching)
+- 05-03-PLAN.md: Summary cards (KPI widgets, sparklines)
+- 05-04-PLAN.md: Time series charts (line/area charts, date range picker)
+- 05-05-PLAN.md: Data tables (sortable, filterable, paginated tables)
+- 05-06-PLAN.md: Real-time updates (WebSocket integration, live indicators)
+- 05-07-PLAN.md: Export functionality (CSV/PDF generation, scheduled reports)
 ```
 
-Complex work gets its own plan with full context budget.
+Complex work gets its own plan with full context budget. Don't compress complexity into fewer plans.
 </by_complexity>
 
 <by_verification_points>
 
-**Phase:** "Deployment Pipeline"
+**Phase:** "Production Deployment" (moderate - 5 plans)
 
 **Split:**
 ```
-- 06-01-PLAN.md: Vercel setup (deploy via CLI, configure domains)
-  → Ends with checkpoint:human-verify "check xyz.vercel.app loads"
+- 06-01-PLAN.md: Infrastructure setup (Vercel project, domain config)
+  → checkpoint:human-verify "base deploy loads at domain"
 
-- 06-02-PLAN.md: Environment config (secrets via CLI, env vars)
+- 06-02-PLAN.md: Database provisioning (production DB, connection pooling)
+  → checkpoint:human-verify "migrations run successfully"
+
+- 06-03-PLAN.md: Environment config (secrets, env vars, feature flags)
   → Autonomous (no checkpoints) → subagent execution
 
-- 06-03-PLAN.md: CI/CD (GitHub Actions, preview deploys)
-  → Ends with checkpoint:human-verify "check PR preview works"
+- 06-04-PLAN.md: CI/CD pipeline (GitHub Actions, preview deploys, checks)
+  → checkpoint:human-verify "PR preview works"
+
+- 06-05-PLAN.md: Monitoring setup (error tracking, logging, alerts)
+  → checkpoint:human-verify "test error appears in dashboard"
 ```
 
 Verification checkpoints create natural boundaries. Autonomous plans between checkpoints execute via subagent with fresh context.
@@ -251,13 +265,16 @@ Verification checkpoints create natural boundaries. Autonomous plans between che
 
 Example:
 ```
-Phase: Feature X
-- 07-01-PLAN.md: Backend (autonomous) → subagent
-- 07-02-PLAN.md: Frontend (autonomous) → subagent
-- 07-03-PLAN.md: Integration test (has checkpoint:human-verify) → main context
+Phase: "E-commerce Cart System" (6 plans)
+- 07-01-PLAN.md: Cart data models (autonomous) → subagent
+- 07-02-PLAN.md: Cart API endpoints (autonomous) → subagent
+- 07-03-PLAN.md: Cart state management (autonomous) → subagent
+- 07-04-PLAN.md: Cart UI components (autonomous) → subagent
+- 07-05-PLAN.md: Checkout flow (has checkpoint:decision for payment provider) → main context
+- 07-06-PLAN.md: Order confirmation (has checkpoint:human-verify for email) → main context
 ```
 
-Two fresh contexts, one interactive verification. Perfect.
+Four fresh contexts via subagent, two interactive plans. Maximize autonomous work.
 </interactive_plans>
 </autonomous_vs_interactive>
 
@@ -289,32 +306,42 @@ Result: 8 tasks, 80%+ context, degradation at task 4-5
 <pattern_atomic>
 
 ```
-Split into 4 plans:
+Split into 6 plans:
 
 Plan 1: "Auth Database Models" (2 tasks)
-- Database schema (User, Session)
+- Database schema (User, Session, RefreshToken)
 - Migration files
 
-Plan 2: "Auth API Core" (3 tasks)
+Plan 2: "Password Utilities" (2 tasks)
+- Hashing with bcrypt/argon2
+- Validation and strength checking
+
+Plan 3: "Auth API - Registration" (2 tasks)
 - Register endpoint
+- Email verification flow
+
+Plan 4: "Auth API - Session Management" (3 tasks)
 - Login endpoint
-- JWT utilities
-
-Plan 3: "Auth API Protection" (2 tasks)
-- Protected route middleware
 - Logout endpoint
+- JWT utilities and refresh token rotation
 
-Plan 4: "Auth UI Components" (2 tasks)
+Plan 5: "Auth Middleware" (2 tasks)
+- Protected route middleware
+- Role-based access control
+
+Plan 6: "Auth UI Components" (3 tasks)
 - Login form
 - Registration form
+- Forgot password flow
 ```
 
 **Why this succeeds:**
 - Each plan: 2-3 tasks, 30-40% context
 - All tasks: Peak quality throughout
-- Git history: 4 focused commits
+- Git history: 6 focused commits
 - Easy to verify each piece
 - Rollback is surgical
+- Complex domain (auth) gets appropriate number of plans
 </pattern_atomic>
 
 <antipattern_efficiency_trap>
@@ -438,11 +465,17 @@ Each commit tells a story. Each is reviewable. Each is revertable. This is craft
 
 <summary>
 
-**2-3 tasks, 50% context target:**
+**2-3 tasks per plan, 50% context target:**
 - All tasks: Peak quality
 - Git: Atomic, surgical commits
 - Quality: Consistent excellence
 - Autonomous plans: Subagent execution (fresh context)
+
+**Plan count scales with complexity:**
+- Simple phase (add a feature): 2-3 plans
+- Moderate phase (new integration): 4-5 plans
+- Complex phase (auth, payments, dashboards): 6-8 plans
+- Very complex phase (major subsystem): 8-10+ plans
 
 **The principle:** Aggressive atomicity. More plans, smaller scope, consistent quality.
 
