@@ -1,5 +1,5 @@
 ---
-description: Quickly capture an enhancement idea for future consideration [description]
+description: Quickly capture an enhancement idea for future consideration [issue description]
 ---
 
 <objective>
@@ -9,6 +9,10 @@ This is a "capture and continue" command - log the idea in the prescribed format
 
 Purpose: Prevent losing good ideas while staying focused on current execution.
 </objective>
+
+<context>
+Issue description: $ARGUMENTS
+</context>
 
 <workflow>
 @gsd/workflows/add-issue.md

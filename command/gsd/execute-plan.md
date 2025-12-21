@@ -9,8 +9,7 @@ Execute a PLAN.md file, create SUMMARY.md, update project state, commit.
 Uses intelligent segmentation:
 
 - Plans without checkpoints → spawn subagent for full autonomous execution
-- Plans with verify checkpoints → segment execution, pause at checkpoints
-- Plans with decision checkpoints → execute in main context
+- Plans with checkpoints → segment execution, pause at checkpoints, pass context to next segment
 </objective>
 
 <execution_context>
@@ -34,13 +33,17 @@ Plan path: $ARGUMENTS
 2. Verify plan at $ARGUMENTS exists
 3. Check if SUMMARY.md already exists (plan already executed?)
 4. Load workflow config for mode (interactive/yolo)
-5. Follow execute-phase.md workflow:
-   - Parse plan and determine execution strategy (A/B/C)
-   - Execute tasks (via subagent or main context as appropriate)
-   - Handle checkpoints and deviations
-   - Create SUMMARY.md
-   - Update STATE.md
-   - Commit changes
+5. Parse plan to identify checkpoints (if any)
+6. Determine execution strategy:
+   - No checkpoints → Strategy A (fully autonomous)
+   - Has checkpoints → Strategy B (segmented)
+7. Execute using appropriate strategy:
+   - Spawn subagent(s) for task execution
+   - Pause at checkpoints, present to user
+   - Pass checkpoint outcomes to subsequent segments
+8. Create SUMMARY.md
+9. Update STATE.md
+10. Commit changes
 
 **Note:** Use OpenCode's native `todowrite`/`todoread` tools to track task progress during execution. This provides visibility into progress alongside STATE.md updates.
 </process>
@@ -55,18 +58,35 @@ Plan path: $ARGUMENTS
 - Subagent creates SUMMARY.md and commits
 - Main context: orchestration only (~5% usage)
 
-**Strategy B: Segmented** (has verify-only checkpoints)
+**Strategy B: Segmented** (has any checkpoints - verify or decision)
 
-- Execute in segments between checkpoints
-- Use Task tool for autonomous segments
-- Main context for checkpoints
-- Aggregate results → SUMMARY → commit
+- Parse plan to identify checkpoint locations
+- Execute in segments between checkpoints using Task tool
+- At each checkpoint:
+  1. Subagent returns with completed work + checkpoint info
+  2. Main context presents checkpoint to user (verify or decision)
+  3. User responds
+  4. New subagent spawns with:
+     - Remaining tasks
+     - Checkpoint outcome (decision made or verification result)
+     - Summary of work completed so far
+- Final segment creates SUMMARY.md and commits
+- Decision outcomes are passed as context to subsequent segments
 
-**Strategy C: Decision-Dependent** (has decision checkpoints)
+**Passing checkpoint context to next segment:**
 
-- Execute in main context
-- Decision outcomes affect subsequent tasks
-- Quality maintained through small scope (2-3 tasks per plan)
+```
+Previous work completed:
+- [Task 1]: [outcome]
+- [Task 2]: [outcome]
+
+Checkpoint resolved:
+- Type: decision
+- Decision: "Use Supabase Auth"
+- Rationale: [user's reasoning if provided]
+
+Continue with remaining tasks, incorporating the decision above.
+```
 </execution_strategies>
 
 <deviation_rules>
