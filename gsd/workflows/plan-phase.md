@@ -776,7 +776,7 @@ Phase plan created: .planning/phases/XX-name/{phase}-01-PLAN.md
 
 `/gsd/execute-plan .planning/phases/XX-name/{phase}-01-PLAN.md`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 
@@ -802,7 +802,7 @@ Total: [X] tasks across [Y] focused plans.
 
 `/gsd/execute-plan .planning/phases/XX-name/{phase}-01-PLAN.md`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 

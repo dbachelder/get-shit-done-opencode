@@ -271,7 +271,7 @@ Confidence: [level]
 
 **To plan directly:** `/gsd/plan-phase [current-phase]`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 

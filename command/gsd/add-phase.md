@@ -163,7 +163,7 @@ Project state updated: .planning/STATE.md
 
 `/gsd/plan-phase {N}`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 

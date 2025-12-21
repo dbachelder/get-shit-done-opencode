@@ -434,7 +434,7 @@ Tag: v[X.Y]
 
 **To create directly:** `/gsd/new-milestone`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 ```

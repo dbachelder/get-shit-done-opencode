@@ -13,7 +13,7 @@ Standard format for presenting next steps after completing a command or workflow
 
 `{command to copy-paste}`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 
@@ -29,7 +29,7 @@ _(`/clear` first for fresh context)_
 1. **Always show what it is** — name + description, never just a command path
 2. **Pull context from source** — ROADMAP.md for phases, PLAN.md `<objective>` for plans
 3. **Command in inline code** — backticks, easy to copy-paste
-4. **`/clear` explanation** — always include, keeps it concise but explains why
+4. **`/new` explanation** — always include, keeps it concise but explains why
 5. **"Also available" not "Other options"** — sounds more app-like
 6. **Visual separators** — `---` above and below to make it stand out
 
@@ -46,7 +46,7 @@ _(`/clear` first for fresh context)_
 
 `/gsd/execute-plan .planning/phases/02-auth/02-03-PLAN.md`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 
@@ -71,7 +71,7 @@ _(Final plan in Phase 2)_
 
 `/gsd/execute-plan .planning/phases/02-auth/02-03-PLAN.md`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 
@@ -93,7 +93,7 @@ _(`/clear` first for fresh context)_
 
 `/gsd/plan-phase 2`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 
@@ -122,7 +122,7 @@ Show completion status before next action:
 
 `/gsd/plan-phase 3`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 
@@ -151,7 +151,7 @@ When there's no clear primary action:
 
 **To research unknowns:** `/gsd/research-phase 3`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 ```
@@ -171,7 +171,7 @@ All 4 phases shipped
 
 `/gsd/discuss-milestone`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 
@@ -219,18 +219,18 @@ Extract: `**02-03: Refresh Token Rotation** — Add /api/auth/refresh with slidi
 ```
 ## To Continue
 
-Run `/clear`, then paste:
+Run `/new`, then paste:
 /gsd/execute-plan .planning/phases/02-auth/02-03-PLAN.md
 ```
 
 User has no idea what 02-03 is about.
 
-### Don't: Missing /clear explanation
+### Don't: Missing /new explanation
 
 ```
 `/gsd/plan-phase 3`
 
-Run /clear first.
+Run /new first.
 ```
 
 Doesn't explain why. User might skip it.

@@ -184,7 +184,7 @@ Ready to create the milestone structure.
 
 `/gsd/new-milestone`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 ```

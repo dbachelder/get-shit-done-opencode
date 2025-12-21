@@ -162,7 +162,7 @@ Present next steps:
 
 **To plan directly:** `/gsd/plan-phase ${PHASE}`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 

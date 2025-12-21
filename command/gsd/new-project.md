@@ -224,7 +224,7 @@ Project initialized:
 
 `/gsd/create-roadmap`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 ```

@@ -84,7 +84,7 @@ Roadmap created:
 
 `/gsd/plan-phase 1`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 

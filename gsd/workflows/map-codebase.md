@@ -365,7 +365,7 @@ Created .planning/codebase/:
 
 `/gsd/new-project`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 

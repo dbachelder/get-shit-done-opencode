@@ -165,7 +165,7 @@ Based on current phase status:
 
 `/gsd/execute-plan [path]`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 ```
 
 **If current phase needs planning (no plans yet):**
@@ -181,7 +181,7 @@ Check for CONTEXT.md and RESEARCH.md status:
 
 `/gsd/plan-phase [N]`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 
@@ -201,7 +201,7 @@ _(`/clear` first for fresh context)_
 
 `/gsd/plan-phase [N+1]`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 ```
 
 **If all phases complete (100%):**

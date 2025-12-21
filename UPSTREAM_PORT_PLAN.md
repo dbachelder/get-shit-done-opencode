@@ -54,7 +54,7 @@ Port upstream changes from the original Claude Code GSD to our OpenCode edition.
 ## ▶ Next Up                              (not "To Continue")
 **Phase N: Name** — description           (not just command path)
 `/gsd/command`                            (inline backticks, not fenced block)
-<sub>`/clear` first → fresh context</sub> (explain why)
+<sub>`/new` first → fresh context</sub> (explain why)
 **Also available:**                       (not "Other options:")
 ```
 
@@ -74,7 +74,7 @@ Port upstream changes from the original Claude Code GSD to our OpenCode edition.
 | Old | New |
 |-----|-----|
 | `## To Continue` | `## ▶ Next Up` |
-| `Run /clear, then paste:` + fenced block | Inline backtick + `<sub>` |
+| `Run /new, then paste:` + fenced block | Inline backtick + `<sub>` |
 | `Other options:` | `**Also available:**` |
 | Just command path | `**Phase N: Name** — description` |
 

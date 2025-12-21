@@ -345,7 +345,7 @@ Milestone v[X.Y] [Name] created:
 
 **To plan directly:** `/gsd/plan-phase [N]`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 

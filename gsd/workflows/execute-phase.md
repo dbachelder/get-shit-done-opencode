@@ -155,19 +155,19 @@ grep -n "type=\"checkpoint" .planning/phases/XX-name/{phase}-{plan}-PLAN.md
 
 Segment = tasks between checkpoints (or start→first checkpoint, or last checkpoint→end)
 
-**For each segment, determine routing:**
+**All segments route to subagent, with checkpoint outcomes passed forward:**
 
 ```
-Segment routing rules:
+Segment routing:
 
-IF segment has no prior checkpoint:
-  → SUBAGENT (first segment, nothing to depend on)
+ALL segments → SUBAGENT
+- First segment: No prior context needed
+- After checkpoint: Pass checkpoint outcome to subagent
 
-IF segment follows checkpoint:human-verify:
-  → SUBAGENT (verification is just confirmation, doesn't affect next work)
-
-IF segment follows checkpoint:decision OR checkpoint:human-action:
-  → MAIN CONTEXT (next tasks need the decision/result)
+Checkpoint outcomes are passed as context:
+- human-verify: "User approved" or "User reported issues: [details]"
+- decision: "User selected: [option]" with rationale if provided
+- human-action: "User completed: [action]"
 ```
 
 **3. Execution pattern:**
@@ -178,22 +178,25 @@ IF segment follows checkpoint:decision OR checkpoint:human-action:
 Spawn subagent → execute all tasks → SUMMARY → commit → report back
 ```
 
-**Pattern B: Segmented with verify-only checkpoints**
+**Pattern B: Segmented (has any checkpoints - verify, decision, or human-action)**
 
 ```
 Segment 1 (tasks 1-3): Spawn subagent → execute → report back
-Checkpoint 4 (human-verify): Main context → you verify → continue
-Segment 2 (tasks 5-6): Spawn NEW subagent → execute → report back
-Checkpoint 7 (human-verify): Main context → you verify → continue
+Checkpoint 4 (any type): Main context → user responds → capture outcome
+Segment 2 (tasks 5-6): Spawn NEW subagent with checkpoint outcome → execute → report back
+Checkpoint 7 (any type): Main context → user responds → capture outcome
+Segment 3 (tasks 8-9): Spawn NEW subagent with all prior outcomes → execute → report back
 Aggregate results → SUMMARY → commit
 ```
 
-**Pattern C: Decision-dependent (must stay in main)**
-
+Decision outcomes are passed to subsequent subagents as context:
 ```
-Checkpoint 1 (decision): Main context → you decide → continue in main
-Tasks 2-5: Main context (need decision from checkpoint 1)
-No segmentation benefit - execute entirely in main
+Previous checkpoint resolved:
+- Type: decision
+- Decision: "Use Supabase Auth"  
+- Rationale: [user's reasoning if provided]
+
+Incorporate this decision into remaining tasks.
 ```
 
 **4. Why this works:**
@@ -225,33 +228,45 @@ Follow all deviation rules and authentication gate protocols from the plan.
 
 When complete, report: plan name, tasks completed, SUMMARY path, commit hash."
 
-**For segmented plans (has verify-only checkpoints):**
+**For segmented plans (has any checkpoints):**
 
-Execute segment-by-segment:
+Execute segment-by-segment, passing checkpoint outcomes forward:
 
-For each autonomous segment:
+```
+checkpoint_outcomes = []
+
+For each segment:
   Use the Task tool to spawn a subagent:
   - subagent_type: "general"
   - description: "Execute plan segment"
-  - prompt: "Execute tasks [X-Y] from plan at .planning/phases/{phase}-{plan}-PLAN.md. Read the plan for full context and deviation rules. Do NOT create SUMMARY or commit - just execute these tasks and report results."
+  - prompt: "Execute tasks [X-Y] from plan at .planning/phases/{phase}-{plan}-PLAN.md.
+    
+    Read the plan for full context and deviation rules.
+    
+    [If checkpoint_outcomes not empty:]
+    Previous checkpoint outcomes to incorporate:
+    ${checkpoint_outcomes.map(o => `- ${o.type}: ${o.outcome}`).join('\n')}
+    
+    Do NOT create SUMMARY or commit - just execute these tasks and report results."
 
   Wait for subagent completion
+  Capture segment results
 
 For each checkpoint:
-  Execute in main context
-  Wait for user interaction
+  Present checkpoint to user in main context
+  Wait for user response
+  Capture outcome:
+    - human-verify: "approved" or issues description
+    - decision: selected option + rationale
+    - human-action: "completed"
+  Add to checkpoint_outcomes list
   Continue to next segment
 
 After all segments complete:
-  Aggregate all results
-  Create SUMMARY.md
+  Aggregate all results from all segments
+  Create SUMMARY.md (include checkpoint decisions in Decisions section)
   Commit with all changes
-
-**For decision-dependent plans:**
-
-Execute in main context (standard flow below)
-No subagent routing
-Quality maintained through small scope (2-3 tasks per plan)
+```
 
 See step name="segment_execution" for detailed segment execution loop.
 </step>
@@ -259,13 +274,15 @@ See step name="segment_execution" for detailed segment execution loop.
 <step name="segment_execution">
 **Detailed segment execution loop for segmented plans.**
 
-**This step applies ONLY to segmented plans (Pattern B: has checkpoints, but they're verify-only).**
+**This step applies to segmented plans (Pattern B: has any checkpoints).**
 
-For Pattern A (fully autonomous) and Pattern C (decision-dependent), skip this step.
+For Pattern A (fully autonomous), skip this step.
 
 **Execution flow:**
 
 ```
+checkpoint_outcomes = []
+
 1. Parse plan to identify segments:
    - Read plan file
    - Find checkpoint locations: grep -n "type=\"checkpoint" PLAN.md
@@ -279,46 +296,52 @@ For Pattern A (fully autonomous) and Pattern C (decision-dependent), skip this s
 
 2. For each segment in order:
 
-   A. Determine routing (apply rules from parse_segments):
-      - No prior checkpoint? → Subagent
-      - Prior checkpoint was human-verify? → Subagent
-      - Prior checkpoint was decision/human-action? → Main context
+   Use the Task tool to spawn a subagent:
+   - subagent_type: "general"
+   - description: "Execute plan segment"
+   - prompt: "Execute tasks [task numbers/names] from plan at [plan path].
 
-   B. If routing = Subagent:
-      Use the Task tool to spawn a subagent:
-      - subagent_type: "general"
-      - description: "Execute plan segment"
-      - prompt: "Execute tasks [task numbers/names] from plan at [plan path].
+   **Context:**
+   - Read the full plan for objective, context files, and deviation rules
+   - You are executing a SEGMENT of this plan (not the full plan)
+   - Other segments will be executed separately
 
-      **Context:**
-      - Read the full plan for objective, context files, and deviation rules
-      - You are executing a SEGMENT of this plan (not the full plan)
-      - Other segments will be executed separately
+   [If checkpoint_outcomes not empty:]
+   **Previous checkpoint outcomes to incorporate:**
+   [For each outcome in checkpoint_outcomes:]
+   - Type: [checkpoint type]
+   - Outcome: [user's response/decision]
+   - Rationale: [if provided]
+   
+   Incorporate these outcomes into your execution of remaining tasks.
 
-      **Your responsibilities:**
-      - Execute only the tasks assigned to you
-      - Follow all deviation rules and authentication gate protocols
-      - Track deviations for later Summary
-      - DO NOT create SUMMARY.md (will be created after all segments complete)
-      - DO NOT commit (will be done after all segments complete)
+   **Your responsibilities:**
+   - Execute only the tasks assigned to you
+   - Follow all deviation rules and authentication gate protocols
+   - Track deviations for later Summary
+   - DO NOT create SUMMARY.md (will be created after all segments complete)
+   - DO NOT commit (will be done after all segments complete)
 
-      **Report back:**
-      - Tasks completed
-      - Files created/modified
-      - Deviations encountered
-      - Any issues or blockers"
+   **Report back:**
+   - Tasks completed
+   - Files created/modified
+   - Deviations encountered
+   - Any issues or blockers"
 
-      Wait for subagent to complete
-      Capture results (files changed, deviations, etc.)
+   Wait for subagent to complete
+   Capture results (files changed, deviations, etc.)
 
-   C. If routing = Main context:
-      Execute tasks in main using standard execution flow (step name="execute")
-      Track results locally
+3. For each checkpoint:
+   Present checkpoint to user in main context
+   Wait for user response
+   Capture and store outcome:
+     - human-verify: "approved" or description of issues
+     - decision: selected option + user's rationale if given
+     - human-action: "completed" + any relevant details
+   Add outcome to checkpoint_outcomes list
+   Continue to next segment
 
-   D. After segment completes (whether subagent or main):
-      Continue to next checkpoint/segment
-
-3. After ALL segments complete:
+4. After ALL segments complete:
 
    A. Aggregate results from all segments:
       - Collect files created/modified from all segments
@@ -329,75 +352,89 @@ For Pattern A (fully autonomous) and Pattern C (decision-dependent), skip this s
    B. Create SUMMARY.md:
       - Use aggregated results
       - Document all work from all segments
+      - Include checkpoint decisions in "Decisions Made" section
       - Include deviations from all segments
-      - Note which segments were subagented
 
    C. Commit:
       - Stage all files from all segments
       - Stage SUMMARY.md
       - Commit with message following plan guidance
-      - Include note about segmented execution if relevant
 
    D. Report completion
 
-**Example execution trace:**
+**Example execution trace (with decision checkpoint):**
 
-Plan: 01-02-PLAN.md (8 tasks, 2 verify checkpoints)
+Plan: 02-01-PLAN.md (6 tasks, 1 decision checkpoint, 1 verify checkpoint)
 
 Parsing segments...
-- Segment 1: Tasks 1-3 (autonomous)
-- Checkpoint 4: human-verify
-- Segment 2: Tasks 5-6 (autonomous)
-- Checkpoint 7: human-verify
-- Segment 3: Task 8 (autonomous)
+- Segment 1: Tasks 1-2 (setup)
+- Checkpoint 3: decision (auth provider)
+- Segment 2: Tasks 4-5 (implement auth)
+- Checkpoint 6: human-verify
 
-Routing analysis:
-- Segment 1: No prior checkpoint → SUBAGENT ✓
-- Checkpoint 4: Verify only → MAIN (required)
-- Segment 2: After verify → SUBAGENT ✓
-- Checkpoint 7: Verify only → MAIN (required)
-- Segment 3: After verify → SUBAGENT ✓
+checkpoint_outcomes = []
 
 Execution:
-[1] Spawning subagent for tasks 1-3...
-    → Subagent completes: 3 files modified, 0 deviations
-[2] Executing checkpoint 4 (human-verify)...
+[1] Spawning subagent for tasks 1-2...
+    → Subagent completes: 2 files modified, 0 deviations
+
+[2] Executing checkpoint 3 (decision)...
     ════════════════════════════════════════
-    CHECKPOINT: Verification Required
-    Task 4 of 8: Verify database schema
-    I built: User and Session tables with relations
-    How to verify: Check src/db/schema.ts for correct types
+    CHECKPOINT: Decision Required
+    Task 3 of 6: Select authentication provider
+    
+    Options:
+    1. supabase - Built-in with DB, free tier
+    2. clerk - Best DX, paid after 10k
+    3. nextauth - Self-hosted, max control
+    
+    Select: supabase, clerk, or nextauth
     ════════════════════════════════════════
+    User: "clerk - we want the best onboarding UX"
+    
+    checkpoint_outcomes.push({
+      type: "decision",
+      outcome: "clerk",
+      rationale: "prioritizing best onboarding UX"
+    })
+
+[3] Spawning subagent for tasks 4-5 WITH decision context...
+    Prompt includes:
+    "Previous checkpoint outcomes:
+    - Type: decision
+    - Outcome: clerk
+    - Rationale: prioritizing best onboarding UX
+    
+    Implement auth using Clerk based on this decision."
+    
+    → Subagent completes: 4 files modified, 0 deviations
+
+[4] Executing checkpoint 6 (human-verify)...
     User: "approved"
-[3] Spawning subagent for tasks 5-6...
-    → Subagent completes: 2 files modified, 1 deviation (added error handling)
-[4] Executing checkpoint 7 (human-verify)...
-    User: "approved"
-[5] Spawning subagent for task 8...
-    → Subagent completes: 1 file modified, 0 deviations
+    
+    checkpoint_outcomes.push({
+      type: "human-verify", 
+      outcome: "approved"
+    })
 
 Aggregating results...
 - Total files: 6 modified
-- Total deviations: 1
-- Segmented execution: 3 subagents, 2 checkpoints
+- Decisions: 1 (Clerk for auth)
+- Deviations: 0
 
 Creating SUMMARY.md...
+  Decisions Made:
+  - Selected Clerk for authentication (user prioritized onboarding UX)
+  
 Committing...
 ✓ Complete
 ```
 
 **Benefits of this pattern:**
-- Main context usage: ~20% (just orchestration + checkpoints)
-- Subagent 1: Fresh 0-30% (tasks 1-3)
-- Subagent 2: Fresh 0-30% (tasks 5-6)
-- Subagent 3: Fresh 0-20% (task 8)
-- All autonomous work: Peak quality
-- Can handle large plans with many tasks if properly segmented
-
-**When NOT to use segmentation:**
-- Plan has decision/human-action checkpoints that affect following tasks
-- Following tasks depend on checkpoint outcome
-- Better to execute in main sequentially in those cases
+- Main context usage: ~15-20% (orchestration + checkpoints only)
+- Each subagent: Fresh context, peak quality
+- Decision outcomes flow forward without losing context
+- Can handle complex plans with mixed checkpoint types
 </step>
 
 <step name="load_prompt">
@@ -1288,7 +1325,7 @@ Summary: .planning/phases/XX-name/{phase}-{plan}-SUMMARY.md
 
 `/gsd/execute-plan .planning/phases/XX-name/{phase}-{next-plan}-PLAN.md`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 
@@ -1340,7 +1377,7 @@ This milestone is 100% done.
 
 `/gsd/complete-milestone`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 
@@ -1367,7 +1404,7 @@ Phase [Z]: [Name] COMPLETE - all [Y] plans finished.
 
 **To plan directly:** `/gsd/plan-phase [X+1]`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 
 ---
 

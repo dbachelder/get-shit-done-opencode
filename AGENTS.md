@@ -63,7 +63,7 @@ All commands end with a standardized "Next Up" block:
 
 `/gsd/plan-phase 2`
 
-_(`/clear` first for fresh context)_
+_(`/new` first for fresh context)_
 ```
 
 ### No HTML Tags
