@@ -133,6 +133,101 @@ Milestone Stats:
 
 </step>
 
+<step name="evolve_project_full_review">
+**Full PROJECT.md review at milestone completion.**
+
+This is the primary trigger for PROJECT.md evolution. Review and update all sections.
+
+**1. Read current PROJECT.md:**
+
+```bash
+cat .planning/PROJECT.md
+```
+
+**2. Review each section:**
+
+**What This Is:**
+- Does description still match reality?
+- If drifted significantly, update to reflect current state
+
+**Core Value:**
+- Is this still the north star?
+- Has something else become more important?
+
+**Requirements - Move completed items:**
+
+```markdown
+### Validated
+<!-- Items shipped in this milestone -->
+- [Feature that shipped] — v[X.Y]
+- [Feature that shipped] — v[X.Y]
+
+### Active
+<!-- Remove shipped items, add new hypotheses for next milestone -->
+- [ ] [New feature for next version]
+
+### Out of Scope
+<!-- Add anything explicitly cut, with reasoning -->
+- [Feature] — [reason: deferred, not needed, wrong approach]
+```
+
+**Key Decisions - Add outcomes:**
+
+Review decisions made during this milestone:
+
+```bash
+# Get decisions from STATE.md
+grep -A20 "### Decisions Made" .planning/STATE.md
+```
+
+For each decision, assess outcome:
+- **Good** - Proven correct, keep it
+- **Revisit** - Causing friction, reconsider next milestone  
+- **Pending** - Too early to tell
+
+Add milestone decisions to PROJECT.md Key Decisions table with outcomes.
+
+**Context:**
+- Any new context learned during milestone?
+- Constraints that changed?
+
+**3. Update last modified:**
+
+```markdown
+*Last updated: YYYY-MM-DD after milestone v[X.Y] completion*
+```
+
+**4. Update STATE.md Project Reference:**
+
+After PROJECT.md is updated, refresh STATE.md's Project Reference section:
+
+```markdown
+## Project Reference
+
+See `.planning/PROJECT.md` for full project context.
+
+**Core Value:** [Updated Core Value from PROJECT.md]
+**Current Focus:** [New Active requirements summary for next milestone]
+```
+
+**5. Present changes:**
+
+```
+PROJECT.md updated for v[X.Y] milestone:
+
+Requirements evolved:
+- Validated: [N] items (shipped this milestone)
+- Active: [M] items (next milestone focus)
+- Out of Scope: [P] items (explicitly excluded)
+
+Key decisions: [X] with outcomes updated
+
+[Show any significant changes to What This Is or Core Value]
+```
+
+Proceed to extract_accomplishments.
+</step>
+
 <step name="extract_accomplishments">
 Read all phase SUMMARY.md files in milestone range:
 

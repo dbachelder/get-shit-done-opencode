@@ -1,207 +1,154 @@
 # PROJECT.md Template
 
-Template for `.planning/PROJECT.md` - the full project context captured during initialization.
+Template for `.planning/PROJECT.md` - an evolutionary document that grows with your project.
 
-## Greenfield Project (v1.0)
+## Philosophy
+
+PROJECT.md evolves from static initialization document to living requirements tracker:
+
+1. **At init:** Captures vision and initial hypotheses
+2. **After shipping:** Requirements move from Active to Validated (or Out of Scope)
+3. **Key decisions:** Accumulated with outcomes over time
+4. **Regular reviews:** Full review at milestone completion, spot updates during execution
+
+## Template
 
 ```markdown
 # [Project Name]
 
-## Vision
+## What This Is
 
-[What this is and why it matters. 2-4 paragraphs capturing the full picture.
-Use the user's language and framing. Include motivation, not just description.
-This should feel like the user explaining their project to a smart collaborator.]
+[Current accurate description - updated when reality drifts from original vision.
+Start with 2-4 paragraphs capturing full picture, compress over time as project matures.]
 
-## Problem
+## Core Value
 
-[What problem exists, who has it, why it matters, what the current state is.
-Be specific - vague problems lead to vague solutions.
-Include the pain, the gap, or the opportunity that makes this worth building.]
+[The ONE thing. If everything else fails, this must work.
+This is your north star for scope decisions.]
 
-## Success Criteria
+## Requirements
 
-How we know this worked:
+### Validated
+<!-- Shipped and confirmed valuable by users/testing -->
 
-- [ ] [Measurable outcome 1 - specific, verifiable]
-- [ ] [Measurable outcome 2 - specific, verifiable]
-- [ ] [Measurable outcome 3 - specific, verifiable]
-- [ ] [Add as many as genuinely needed]
+- [Feature] — v[X.Y]
 
-## Scope
+### Active
+<!-- Current hypotheses being built -->
 
-### Building
-- [Feature/capability 1]
-- [Feature/capability 2]
-- [Feature/capability 3]
+- [ ] [Feature/capability]
+- [ ] [Feature/capability]
+- [ ] [Feature/capability]
 
-### Not Building
-- [Explicit exclusion 1 - prevents scope creep]
-- [Explicit exclusion 2 - clarifies boundaries]
-- [Explicit exclusion 3 - manages expectations]
+### Out of Scope
+<!-- Explicitly excluded, with reasoning -->
+
+- [Feature] — [reason why excluded]
+- [Feature] — [reason why excluded]
+
+## Key Decisions
+
+| Decision | Rationale | Outcome |
+|----------|-----------|---------|
+| [Choice made] | [Why this choice] | [Good / Revisit / Pending] |
+| [Choice made] | [Why this choice] | [Good / Revisit / Pending] |
+
+Outcome markers:
+- **Good** - Decision proven correct, keep it
+- **Revisit** - Causing issues, reconsider in future milestone
+- **Pending** - Too early to evaluate
 
 ## Context
 
 [Background information that informs implementation:
-- Current state (greenfield)
-- Relevant prior work or experience
+- Prior work or experience relevant to this project
 - Technical environment or ecosystem context
-- Explored alternatives and why they were rejected]
+- Explored alternatives and why rejected
+- Constraints (tech stack, timeline, resources, dependencies)]
 
-## Constraints
-
-- **[Constraint type]**: [What] - [Why]
-- **[Constraint type]**: [What] - [Why]
-- **[Constraint type]**: [What] - [Why]
-
-Common types: Tech stack, Timeline, Resources, Dependencies, Compatibility, Performance, Security
-
-## Decisions Made
-
-Key decisions from project exploration:
-
-| Decision | Choice | Rationale |
-|----------|--------|-----------|
-| [Area/Topic] | [What we decided] | [Why this choice] |
-| [Area/Topic] | [What we decided] | [Why this choice] |
-
-## Open Questions
-
-Things to figure out during execution:
-
-- [ ] [Question 1 - known unknown to resolve]
-- [ ] [Question 2 - decision to make later]
-- [ ] [Question 3 - area needing research]
-
----
-*Initialized: [date]*
+*Last updated: YYYY-MM-DD after [trigger: init/milestone/drift]*
 ```
 
-## Brownfield Project (v1.1+)
+## Evolution Triggers
 
-After shipping v1.0, update PROJECT.md to include current state:
+**When to update PROJECT.md:**
+
+| Trigger | What to Update | Who Updates |
+|---------|---------------|-------------|
+| Project init | Full document creation | `/gsd/new-project` |
+| Milestone complete | Full review, move Active→Validated | `/gsd/complete-milestone` |
+| Significant drift | What This Is, Active requirements | During execution |
+| Key decision made | Key Decisions table | During execution |
+| Scope change | Active/Out of Scope sections | During planning |
+
+## Update Patterns
+
+### After Milestone (Full Review)
 
 ```markdown
-# [Project Name]
+## Requirements
 
-## Current State (Updated: YYYY-MM-DD)
+### Validated
+<!-- Moved from Active after shipping v1.0 -->
+- User authentication with JWT — v1.0
+- Protected API routes — v1.0
+- Basic CRUD operations — v1.0
 
-**Shipped:** v[X.Y] [Name] (YYYY-MM-DD)
-**Status:** [Production / Beta / Internal / Live with users]
-**Users:** [If known: "~500 downloads, 50 DAU" or "Internal use only" or "N/A"]
-**Feedback:** [Key themes from user feedback, or "Initial release, gathering feedback"]
+### Active
+<!-- New hypotheses for v1.1 -->
+- [ ] Rate limiting
+- [ ] Admin dashboard
+- [ ] Email notifications
 
-**Codebase:**
-- [X,XXX] lines of [primary language]
-- [Key tech stack: framework, platform, deployment target]
-- [Notable dependencies or architecture]
-
-**Known Issues:**
-- [Issue 1 from v1.x that needs addressing]
-- [Issue 2]
-- [Or "None" if clean slate]
-
-## v[Next] Goals
-
-**Vision:** [What's the goal for this next iteration?]
-
-**Motivation:**
-- [Why this work matters now]
-- [User feedback driving it]
-- [Technical debt or improvements needed]
-
-**Scope (v[X.Y]):**
-- [Feature/improvement 1]
-- [Feature/improvement 2]
-- [Feature/improvement 3]
-
-**Success Criteria:**
-- [ ] [Measurable outcome 1]
-- [ ] [Measurable outcome 2]
-- [ ] [Measurable outcome 3]
-
-**Not Building (this version):**
-- [Not doing X in this version]
-- [Not doing Y in this version]
-
-## Constraints
-
-- **[Constraint type]**: [What] - [Why]
-- **[Constraint type]**: [What] - [Why]
-
-## Open Questions
-
-- [ ] [Question for this version]
-- [ ] [Question for this version]
-
----
-
-<details>
-<summary>Original Vision (v1.0 - Archived)</summary>
-
-## Vision
-
-[Original vision content]
-
-## Problem
-
-[Original problem statement]
-
-## Success Criteria
-
-- [x] [Outcome 1] - Achieved
-- [x] [Outcome 2] - Achieved
-- [x] [Outcome 3] - Achieved
-
-## Scope
-
-### Built
-- [What was built]
-
-### Not Built
-- [What was excluded]
-
-## Context
-
-[Original context]
-
-## Constraints
-
-[Original constraints]
-
-## Decisions Made
-
-[Original decisions table]
-
-</details>
+### Out of Scope
+- OAuth providers — deferring to v2.0, focus on core first
+- Mobile app — web-first approach validated
 ```
 
-<guidelines>
-**Greenfield:**
-- Don't compress - capture everything from questioning
-- Use user's words - preserve their language and framing
-- Be specific - vague inputs create vague outputs
-- Include rationale - "what" without "why" loses context
-- Mark unknowns - open questions are valuable, not failures
+### Decision Tracking
 
-**Brownfield:**
-- Current State shows real-world context (shipped, users, feedback)
-- v[Next] Goals focuses on the upcoming work
-- Original Vision collapsed in `<details>` for reference
-- Checkboxes marked [x] for achieved goals
-- This makes all plans brownfield-aware automatically
-</guidelines>
+```markdown
+## Key Decisions
 
-<state_summary>
-When creating STATE.md, extract a summary from PROJECT.md:
+| Decision | Rationale | Outcome |
+|----------|-----------|---------|
+| jose over jsonwebtoken | Better TypeScript support, smaller bundle | Good |
+| Prisma over raw SQL | Type safety, migrations | Good |
+| Skip OAuth for v1 | Reduce scope, validate core first | Pending |
+| Custom auth over Clerk | Full control, no vendor lock-in | Revisit |
+```
 
-**Building:** [One-liner from Vision]
+## Integration with STATE.md
 
-**Core requirements:**
-- [Top 3 from Success Criteria]
+STATE.md no longer copies an immutable "Project Summary" section. Instead:
 
-**Constraints:**
-- [Key constraints]
+**STATE.md references PROJECT.md:**
+```markdown
+## Project Reference
 
-This goes in STATE.md's immutable "Project Summary" section.
-</state_summary>
+See `.planning/PROJECT.md` for current project state.
+
+**Core Value:** [One line from PROJECT.md Core Value section]
+**Current Focus:** [Current Active requirements summary]
+```
+
+This keeps STATE.md lean (~100 lines) while PROJECT.md holds the complete picture.
+
+## Guidelines
+
+**Do:**
+- Update "What This Is" when reality drifts from description
+- Move requirements between sections as status changes
+- Add decision outcomes when you learn what worked
+- Include "Last updated" with trigger reason
+
+**Don't:**
+- Keep stale descriptions that no longer match reality
+- Leave Active requirements after they've shipped
+- Forget to add Out of Scope reasoning
+- Make PROJECT.md too long (compress older sections)
+
+**Size target:** Keep under 150 lines. If growing too large:
+- Compress "What This Is" to essentials
+- Archive old Validated items to milestone docs
+- Summarize Context section

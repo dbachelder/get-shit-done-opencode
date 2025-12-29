@@ -83,15 +83,21 @@ When porting upstream changes:
 
 ## Current Work
 
-### In Progress (Phase 8 of UPSTREAM_PORT_PLAN.md)
-- Phase 8.1: Merged cli-automation.md into checkpoints.md (DONE)
-- Phase 8.2: Compressed scope-estimation.md (DONE)
-- Phase 8.3-8.7: Remaining workflow updates and PROJECT.md evolution
+### Completed (Phase 8 of UPSTREAM_PORT_PLAN.md)
+All Phase 8 tasks complete:
+- Phase 8.1: Merged cli-automation.md into checkpoints.md
+- Phase 8.2: Compressed scope-estimation.md (~75% smaller)
+- Phase 8.3: Removed redundant decision_gate from plan-phase.md
+- Phase 8.4: Added explicit plan count check to execute-phase.md
+- Phase 8.5: Evolutionary PROJECT.md system (new template + STATE.md updates)
+- Phase 8.6: Verified codebase template file paths
+- Phase 8.7: Updated sync info
 
 ### Recently Added
-- `/gsd/add-issue` - Quick issue capture during execution
-- Fixed progress table rendering (plain text instead of markdown pipes)
-- Context reduction: checkpoints.md now includes automation reference (~70% smaller combined)
+- Evolutionary PROJECT.md - requirements tracking that evolves as you ship
+- STATE.md now references PROJECT.md instead of copying immutable summary
+- `/gsd/complete-milestone` now includes `evolve_project_full_review` step
+- Context reduction: checkpoints.md includes automation reference (~70% smaller combined)
 - Context reduction: scope-estimation.md compressed (~75% smaller)
 
 ### Known Issues

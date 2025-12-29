@@ -635,31 +635,6 @@ Reply with a number.
 Only ask if genuinely ambiguous. Don't ask obvious choices.
 </step>
 
-<step name="decision_gate">
-<if mode="yolo">
-```
-⚡ Auto-approved: Create phase prompt for Phase [X]
-```
-
-Skip directly to write_phase_prompt step.
-</if>
-
-<if mode="interactive" OR="custom with gates.confirm_plan true">
-
-## Ready
-
-Ready to create the phase prompt, or would you like me to ask more questions?
-
-1. Create phase prompt - I have enough context
-2. Ask more questions - There are details to clarify
-3. Let me add context - I want to provide more information
-
-Reply with a number.
-
-Loop until "Create phase prompt" selected.
-</if>
-</step>
-
 <step name="write_phase_prompt">
 Use template from `~/.config/opencode/gsd/templates/phase-prompt.md`.
 

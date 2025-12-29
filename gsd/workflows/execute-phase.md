@@ -1295,7 +1295,26 @@ Reply with a number.
 </step>
 
 <step name="offer_next">
-**If more plans in this phase:**
+**First, determine if more plans exist in this phase:**
+
+```bash
+# Get current phase directory from the plan we just executed
+PHASE_DIR=$(dirname "$PLAN_PATH")
+
+# Count PLAN files vs SUMMARY files
+PLAN_COUNT=$(ls "$PHASE_DIR"/*-PLAN.md 2>/dev/null | wc -l | tr -d ' ')
+SUMMARY_COUNT=$(ls "$PHASE_DIR"/*-SUMMARY.md 2>/dev/null | wc -l | tr -d ' ')
+
+echo "Plans: $PLAN_COUNT, Summaries: $SUMMARY_COUNT"
+
+if [[ $SUMMARY_COUNT -lt $PLAN_COUNT ]]; then
+  echo "MORE_PLANS_EXIST"
+else
+  echo "PHASE_COMPLETE"
+fi
+```
+
+**If MORE_PLANS_EXIST (more plans in this phase):**
 
 <if mode="yolo">
 ```

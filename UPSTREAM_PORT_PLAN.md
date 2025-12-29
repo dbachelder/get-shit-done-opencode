@@ -416,17 +416,17 @@ This sync introduces two major changes:
 **Upstream:** `86878b9`, `df1f138`
 
 **Changes:**
-- [ ] Remove redundant `decision_gate` step (confirm_breakdown already handles this)
-- [ ] Add explicit bash commands for deterministic file checks:
-  - `ls .planning/codebase/*.md 2>/dev/null`
-  - `cat .planning/ROADMAP.md`
-  - `ls .planning/phases/`
-  - `ls .planning/phases/*/*-SUMMARY.md 2>/dev/null | sort`
-  - `cat .planning/ISSUES.md 2>/dev/null`
-  - `ls -la src/ 2>/dev/null` and `cat package.json 2>/dev/null | head -20`
+- [x] Remove redundant `decision_gate` step (confirm_breakdown already handles this)
+- [x] Add explicit bash commands for deterministic file checks:
+  - `ls .planning/codebase/*.md 2>/dev/null` (already in load_codebase_context)
+  - `cat .planning/ROADMAP.md` (already in identify_phase)
+  - `ls .planning/phases/` (already in identify_phase)
+  - `ls .planning/phases/*/*-SUMMARY.md 2>/dev/null | sort` (already in read_project_history)
+  - `cat .planning/ISSUES.md 2>/dev/null` (already in read_project_history)
+  - `ls -la src/ 2>/dev/null` and `cat package.json 2>/dev/null | head -20` (already in gather_phase_context)
 
 **Files to modify:**
-- [ ] `gsd/workflows/plan-phase.md`
+- [x] `gsd/workflows/plan-phase.md`
 
 ---
 
@@ -436,9 +436,9 @@ This sync introduces two major changes:
 **Upstream:** `f24203d`
 
 **Changes:**
-- [ ] Add explicit plan count check in `offer_next` step
+- [x] Add explicit plan count check in `offer_next` step
 
-**Add this bash block:**
+**Added this bash block:**
 ```bash
 # Get current phase directory from the plan we just executed
 PHASE_DIR=$(dirname "$PLAN_PATH")
@@ -457,7 +457,7 @@ fi
 ```
 
 **Files to modify:**
-- [ ] `gsd/workflows/execute-phase.md` - Update offer_next step
+- [x] `gsd/workflows/execute-phase.md` - Update offer_next step
 
 ---
 
@@ -504,14 +504,14 @@ fi
 ```
 
 **Files to modify:**
-- [ ] `gsd/templates/project.md` - Replace with evolutionary template
-- [ ] `gsd/templates/state.md` - Update to reference PROJECT.md instead of copying summary
-- [ ] `gsd/workflows/complete-milestone.md` - Add `evolve_project_full_review` step
+- [x] `gsd/templates/project.md` - Replace with evolutionary template
+- [x] `gsd/templates/state.md` - Update to reference PROJECT.md instead of copying summary
+- [x] `gsd/workflows/complete-milestone.md` - Add `evolve_project_full_review` step
 
 **STATE.md changes:**
-- "Project Summary" (immutable copy) → "Project Reference" (pointer to PROJECT.md)
-- 150 lines → 100 lines target
-- Remove "Project Alignment" section (now tracked in PROJECT.md Key Decisions)
+- [x] "Project Summary" (immutable copy) → "Project Reference" (pointer to PROJECT.md)
+- [x] 150 lines → 100 lines target
+- [x] Remove "Project Alignment" section (now tracked in PROJECT.md Key Decisions)
 
 ---
 
@@ -521,13 +521,13 @@ fi
 **Upstream:** `b1f9d57` (already synced, but verify all templates)
 
 **Verify these templates have file path guidance:**
-- [ ] `gsd/templates/codebase/architecture.md` - Location fields with backticks
-- [ ] `gsd/templates/codebase/concerns.md` - Files field required
-- [ ] `gsd/templates/codebase/stack.md` - Backtick formatting
-- [ ] `gsd/templates/codebase/structure.md` - Backtick formatting
-- [ ] `gsd/templates/codebase/conventions.md` - File path examples
-- [ ] `gsd/templates/codebase/integrations.md` - File path examples
-- [ ] `gsd/templates/codebase/testing.md` - File path examples
+- [x] `gsd/templates/codebase/architecture.md` - Has guidance: "Include file paths as concrete examples... Use backtick formatting"
+- [x] `gsd/templates/codebase/concerns.md` - Has guidance: "Always include file paths" + Files field in every section
+- [x] `gsd/templates/codebase/stack.md` - N/A (focuses on technologies, not files)
+- [x] `gsd/templates/codebase/structure.md` - Inherently about file paths, uses backticks throughout
+- [x] `gsd/templates/codebase/conventions.md` - N/A (focuses on coding patterns)
+- [x] `gsd/templates/codebase/integrations.md` - N/A (focuses on external services)
+- [x] `gsd/templates/codebase/testing.md` - Has file path examples in structure section
 
 ---
 
@@ -536,7 +536,7 @@ fi
 **Priority:** LOW
 
 **Files to modify:**
-- [ ] `AGENTS.md` - Update "Last synced" to `51f3950` (v1.3.13, Dec 29)
+- [x] `AGENTS.md` - Update "Last synced" to `51f3950` (v1.3.13, Dec 29)
 
 ---
 

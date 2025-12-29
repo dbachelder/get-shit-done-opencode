@@ -9,19 +9,12 @@ Template for `.planning/STATE.md` - the project's living memory.
 ```markdown
 # Project State
 
-## Project Summary
-[IMMUTABLE - Copy verbatim from PROJECT.md on creation. Never edit this section.]
+## Project Reference
 
-**Building:** [One-liner from project vision]
+See `.planning/PROJECT.md` for full project context.
 
-**Core requirements:**
-- [Requirement 1]
-- [Requirement 2]
-- [Requirement 3]
-
-**Constraints:**
-- [Key constraint 1]
-- [Key constraint 2]
+**Core Value:** [One line from PROJECT.md Core Value section]
+**Current Focus:** [Brief summary of Active requirements]
 
 ## Current Position
 
@@ -30,7 +23,7 @@ Plan: [A] of [B] in current phase
 Status: [Ready to plan / Planning / Ready to execute / In progress / Phase complete]
 Last activity: [YYYY-MM-DD] - [What happened]
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [---] 0%
 
 ## Performance Metrics
 
@@ -71,13 +64,6 @@ None yet.
 
 None yet.
 
-## Project Alignment
-
-Last checked: [Date or "Project start"]
-Status: [✓ Aligned / ⚠️ Drift detected / ✗ Misaligned]
-Assessment: [One line summary]
-Drift notes: [Details if drift detected, otherwise "None"]
-
 ## Session Continuity
 
 Last session: [YYYY-MM-DD HH:MM]
@@ -100,7 +86,7 @@ STATE.md is the project's "short-term memory" that spans all phases and sessions
 <lifecycle>
 
 **Creation:** After ROADMAP.md is created (during init)
-- Copy Project Summary from PROJECT.md (immutable after this)
+- Reference PROJECT.md (Core Value + Current Focus)
 - Initialize empty accumulated context sections
 - Set position to "Phase 1 ready to plan"
 
@@ -119,16 +105,19 @@ STATE.md is the project's "short-term memory" that spans all phases and sessions
 - transition: After phase marked complete
   - Update progress bar
   - Clear resolved blockers
-- alignment-check: After verification
-  - Update alignment status
+- milestone: After PROJECT.md updated
+  - Refresh Project Reference section
 
 </lifecycle>
 
 <sections>
 
-### Project Summary (Immutable)
-Copied from PROJECT.md on project initialization. Never edited afterward.
-Provides constant reference to "what are we building" without re-reading full project doc.
+### Project Reference
+References PROJECT.md instead of copying content. Contains:
+- Core Value: The ONE thing that must work (from PROJECT.md)
+- Current Focus: Summary of Active requirements
+
+Updated when PROJECT.md changes (milestone completion, significant drift).
 
 ### Current Position
 Where we are right now:
@@ -138,7 +127,7 @@ Where we are right now:
 - Last activity - what happened most recently
 - Progress bar - visual indicator of overall completion
 
-Progress calculation: (completed plans) / (total plans across all phases) × 100%
+Progress calculation: (completed plans) / (total plans across all phases) x 100%
 
 ### Performance Metrics
 Track velocity to understand execution patterns:
@@ -167,14 +156,6 @@ Updated after each plan completion.
 - Prefix with originating phase
 - Cleared when addressed
 
-### Project Alignment
-Tracks whether work matches original requirements:
-- ✓ Aligned: On track
-- ⚠️ Drift: Scope creeping or diverging
-- ✗ Misaligned: Work doesn't serve project goals
-
-Updated after each phase completion.
-
 ### Session Continuity
 Enables instant resumption:
 - When was last session
@@ -184,7 +165,7 @@ Enables instant resumption:
 </sections>
 
 <size_constraint>
-Keep STATE.md under 150 lines.
+Keep STATE.md under 100 lines.
 
 It's a DIGEST, not an archive. If accumulated context grows too large:
 - Summarize older phase decisions: "Phases 1-2: [key decisions]"
@@ -212,7 +193,7 @@ This gives you:
 <guidelines>
 **When created:**
 - During project initialization (after ROADMAP.md)
-- Copy Project Summary from PROJECT.md (never edit this section after creation)
+- Reference PROJECT.md (Core Value + Current Focus)
 - Initialize empty sections
 
 **When read:**
@@ -223,19 +204,18 @@ This gives you:
 **When updated:**
 - After each plan execution (update position, extract decisions/issues/blockers)
 - After phase transitions (update progress bar, clear resolved blockers)
-- After alignment checks (update alignment status)
+- After milestone completion (refresh Project Reference from updated PROJECT.md)
 
 **Size management:**
-- Keep under 150 lines total
+- Keep under 100 lines total
 - Summarize older decisions if table grows large
 - Reference ISSUES.md instead of listing all issues
 - Keep only active blockers, archive resolved ones
 
 **Sections:**
-- Project Summary: Immutable project overview
+- Project Reference: Pointer to PROJECT.md with Core Value + Current Focus
 - Current Position: Where we are now (phase, plan, status)
 - Performance Metrics: Velocity tracking
 - Accumulated Context: Decisions, deferred issues, blockers
-- Project Alignment: Are we on track with original vision?
 - Session Continuity: Resume information
 </guidelines>

@@ -125,7 +125,7 @@ GSD provides a structured approach to software development:
 |---------|-------------|-------------|
 | `/gsd/discuss-milestone` | Discuss a milestone | Planning scope for the next major deliverable |
 | `/gsd/new-milestone` | Add a new milestone | After completing a milestone, ready to plan the next version |
-| `/gsd/complete-milestone` | Mark milestone complete | All phases done, ready to tag a release (e.g., v1.0.0) |
+| `/gsd/complete-milestone` | Mark milestone complete | All phases done, ready to tag a release. Evolves PROJECT.md |
 
 #### Help
 | Command | Description | When to Use |
@@ -282,6 +282,7 @@ You decide: dry-run goes in v1.0, exclusions can wait for v2.
 
 → Archives to MILESTONES.md
 → Creates git tag v1.0.0
+→ Evolves PROJECT.md (moves shipped features to "Validated", updates decisions)
 ```
 
 ```
@@ -358,6 +359,31 @@ the relevant codebase documents (STRUCTURE.md, etc.)
 
 No need to re-run /gsd/map-codebase unless major changes.
 ```
+
+### Evolutionary PROJECT.md
+
+PROJECT.md evolves as you ship:
+
+- **At init:** Captures vision and initial requirements as hypotheses
+- **During execution:** Key decisions tracked with rationale
+- **At milestone completion:** Requirements move from "Active" to "Validated" (or "Out of Scope")
+
+```markdown
+## Requirements
+
+### Validated
+- User authentication with JWT — v1.0
+- Protected API routes — v1.0
+
+### Active  
+- [ ] Rate limiting
+- [ ] Admin dashboard
+
+### Out of Scope
+- OAuth providers — deferring to v2.0
+```
+
+This creates a living record of what shipped and what was cut, with reasoning preserved.
 
 ### Understanding Milestones vs Phases
 
