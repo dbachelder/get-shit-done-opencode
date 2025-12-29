@@ -1,286 +1,110 @@
 <overview>
-Plans execute autonomously. Checkpoints formalize the interaction points where human verification or decisions are needed.
+Plans execute autonomously. Checkpoints formalize interaction points where human verification or decisions are needed.
 
 **Core principle:** The LLM automates everything with CLI/API. Checkpoints are for verification and decisions, not manual work.
 </overview>
 
 <checkpoint_types>
 
-<type name="human-verify">
-## checkpoint:human-verify (Most Common)
+## checkpoint:human-verify (90% of checkpoints)
 
 **When:** LLM completed automated work, human confirms it works correctly.
 
-**Use for:**
-- Visual UI checks (layout, styling, responsiveness)
-- Interactive flows (click through wizard, test user flows)
-- Functional verification (feature works as expected)
-- Audio/video playback quality
-- Animation smoothness
-- Accessibility testing
+**Use for:** Visual UI checks, interactive flows, functional verification, audio/video quality, animation smoothness, accessibility testing.
 
 **Structure:**
 ```xml
 <task type="checkpoint:human-verify" gate="blocking">
-  <what-built>[What LLM automated and deployed/built]</what-built>
-  <how-to-verify>
-    [Exact steps to test - URLs, commands, expected behavior]
-  </how-to-verify>
-  <resume-signal>[How to continue - "approved", "yes", or describe issues]</resume-signal>
+  <what-built>[What LLM automated]</what-built>
+  <how-to-verify>[Numbered steps - URLs, commands, expected behavior]</how-to-verify>
+  <resume-signal>[How to continue - "approved" or describe issues]</resume-signal>
 </task>
 ```
 
-**Key elements:**
-- `<what-built>`: What LLM automated (deployed, built, configured)
-- `<how-to-verify>`: Exact steps to confirm it works (numbered, specific)
-- `<resume-signal>`: Clear indication of how to continue
-
-**Example: Vercel Deployment**
+**Example:**
 ```xml
 <task type="auto">
   <name>Deploy to Vercel</name>
-  <files>.vercel/, vercel.json</files>
-  <action>Run `vercel --yes` to create project and deploy. Capture deployment URL from output.</action>
+  <action>Run `vercel --yes` to deploy. Capture URL.</action>
   <verify>vercel ls shows deployment, curl {url} returns 200</verify>
-  <done>App deployed, URL captured</done>
 </task>
 
 <task type="checkpoint:human-verify" gate="blocking">
-  <what-built>Deployed to Vercel at https://myapp-abc123.vercel.app</what-built>
+  <what-built>Deployed to https://myapp.vercel.app</what-built>
   <how-to-verify>
-    Visit https://myapp-abc123.vercel.app and confirm:
-    - Homepage loads without errors
-    - Login form is visible
-    - No console errors in browser DevTools
-  </how-to-verify>
-  <resume-signal>Type "approved" to continue, or describe issues to fix</resume-signal>
-</task>
-```
-
-**Example: UI Component**
-```xml
-<task type="auto">
-  <name>Build responsive dashboard layout</name>
-  <files>src/components/Dashboard.tsx, src/app/dashboard/page.tsx</files>
-  <action>Create dashboard with sidebar, header, and content area. Use Tailwind responsive classes for mobile.</action>
-  <verify>npm run build succeeds, no TypeScript errors</verify>
-  <done>Dashboard component builds without errors</done>
-</task>
-
-<task type="checkpoint:human-verify" gate="blocking">
-  <what-built>Responsive dashboard layout at /dashboard</what-built>
-  <how-to-verify>
-    1. Run: npm run dev
-    2. Visit: http://localhost:3000/dashboard
-    3. Desktop (>1024px): Verify sidebar left, content right, header top
-    4. Tablet (768px): Verify sidebar collapses to hamburger
-    5. Mobile (375px): Verify single column, bottom nav
-    6. Check: No layout shift, no horizontal scroll
-  </how-to-verify>
-  <resume-signal>Type "approved" or describe layout issues</resume-signal>
-</task>
-```
-
-**Example: Xcode Build**
-```xml
-<task type="auto">
-  <name>Build macOS app with Xcode</name>
-  <files>App.xcodeproj, Sources/</files>
-  <action>Run `xcodebuild -project App.xcodeproj -scheme App build`. Check for compilation errors in output.</action>
-  <verify>Build output contains "BUILD SUCCEEDED", no errors</verify>
-  <done>App builds successfully</done>
-</task>
-
-<task type="checkpoint:human-verify" gate="blocking">
-  <what-built>Built macOS app at DerivedData/Build/Products/Debug/App.app</what-built>
-  <how-to-verify>
-    Open App.app and test:
-    - App launches without crashes
-    - Menu bar icon appears
-    - Preferences window opens correctly
-    - No visual glitches or layout issues
+    Visit URL and confirm:
+    1. Homepage loads without errors
+    2. All images/assets load
+    3. No console errors
   </how-to-verify>
   <resume-signal>Type "approved" or describe issues</resume-signal>
 </task>
 ```
-</type>
 
-<type name="decision">
-## checkpoint:decision
+## checkpoint:decision (9% of checkpoints)
 
 **When:** Human must make choice that affects implementation direction.
 
-**Use for:**
-- Technology selection (which auth provider, which database)
-- Architecture decisions (monorepo vs separate repos)
-- Design choices (color scheme, layout approach)
-- Feature prioritization (which variant to build)
-- Data model decisions (schema structure)
+**Use for:** Technology selection, architecture decisions, design choices, feature prioritization.
 
 **Structure:**
 ```xml
 <task type="checkpoint:decision" gate="blocking">
   <decision>[What's being decided]</decision>
-  <context>[Why this decision matters]</context>
+  <context>[Why this matters]</context>
   <options>
-    <option id="option-a">
-      <name>[Option name]</name>
-      <pros>[Benefits]</pros>
-      <cons>[Tradeoffs]</cons>
-    </option>
-    <option id="option-b">
-      <name>[Option name]</name>
-      <pros>[Benefits]</pros>
-      <cons>[Tradeoffs]</cons>
-    </option>
+    <option id="option-a"><name>[Name]</name><pros>[Benefits]</pros><cons>[Tradeoffs]</cons></option>
+    <option id="option-b"><name>[Name]</name><pros>[Benefits]</pros><cons>[Tradeoffs]</cons></option>
   </options>
   <resume-signal>[How to indicate choice]</resume-signal>
 </task>
 ```
 
-**Key elements:**
-- `<decision>`: What's being decided
-- `<context>`: Why this matters
-- `<options>`: Each option with balanced pros/cons (not prescriptive)
-- `<resume-signal>`: How to indicate choice
-
-**Example: Auth Provider Selection**
+**Example:**
 ```xml
 <task type="checkpoint:decision" gate="blocking">
   <decision>Select authentication provider</decision>
-  <context>
-    Need user authentication for the app. Three solid options with different tradeoffs.
-  </context>
+  <context>Need user auth. Three options with different tradeoffs.</context>
   <options>
-    <option id="supabase">
-      <name>Supabase Auth</name>
-      <pros>Built-in with Supabase DB we're using, generous free tier, row-level security integration</pros>
-      <cons>Less customizable UI, tied to Supabase ecosystem</cons>
-    </option>
-    <option id="clerk">
-      <name>Clerk</name>
-      <pros>Beautiful pre-built UI, best developer experience, excellent docs</pros>
-      <cons>Paid after 10k MAU, vendor lock-in</cons>
-    </option>
-    <option id="nextauth">
-      <name>NextAuth.js</name>
-      <pros>Free, self-hosted, maximum control, widely adopted</pros>
-      <cons>More setup work, you manage security updates, UI is DIY</cons>
-    </option>
+    <option id="supabase"><name>Supabase Auth</name><pros>Built-in with DB, free tier, RLS integration</pros><cons>Less customizable, ecosystem lock-in</cons></option>
+    <option id="clerk"><name>Clerk</name><pros>Beautiful UI, best DX</pros><cons>Paid after 10k MAU</cons></option>
+    <option id="nextauth"><name>NextAuth.js</name><pros>Free, self-hosted, max control</pros><cons>More setup, DIY security</cons></option>
   </options>
   <resume-signal>Select: supabase, clerk, or nextauth</resume-signal>
 </task>
 ```
-</type>
 
-<type name="human-action">
-## checkpoint:human-action (Rare)
+## checkpoint:human-action (1% - rare)
 
-**When:** Action has NO CLI/API and requires human-only interaction, OR LLM hit an authentication gate during automation.
+**When:** Action has NO CLI/API and requires human-only interaction.
 
-**Use ONLY for:**
-- **Authentication gates** - LLM tried to use CLI/API but needs credentials to continue (this is NOT a failure)
-- Email verification links (account creation requires clicking email)
-- SMS 2FA codes (phone verification)
-- Manual account approvals (platform requires human review before API access)
-- Credit card 3D Secure flows (web-based payment authorization)
-- OAuth app approvals (some platforms require web-based approval)
+**Use ONLY for:** Email verification links, SMS 2FA codes, manual account approvals, 3D Secure payment flows, OAuth app approvals.
 
-**Do NOT use for pre-planned manual work:**
-- Manually deploying to Vercel (use `vercel` CLI - auth gate if needed)
-- Manually creating Stripe webhooks (use Stripe API - auth gate if needed)
-- Manually creating databases (use provider CLI - auth gate if needed)
-- Running builds/tests manually (use Bash tool)
-- Creating files manually (use Write tool)
+**Do NOT use for:** Deployments (use CLI), creating resources (use CLI/API), builds/tests (use Bash), file operations (use Write/Edit).
 
 **Structure:**
 ```xml
 <task type="checkpoint:human-action" gate="blocking">
-  <action>[What human must do - LLM already did everything automatable]</action>
-  <instructions>
-    [What LLM already automated]
-    [The ONE thing requiring human action]
-  </instructions>
-  <verification>[What LLM can check afterward]</verification>
+  <action>[Unavoidable manual step]</action>
+  <instructions>[What LLM automated] [ONE thing requiring human action]</instructions>
+  <verification>[What LLM checks afterward]</verification>
   <resume-signal>[How to continue]</resume-signal>
 </task>
 ```
 
-**Key principle:** LLM automates EVERYTHING possible first, only asks human for the truly unavoidable manual step.
-
-**Example: Email Verification**
+**Example (email verification):**
 ```xml
-<task type="auto">
-  <name>Create SendGrid account via API</name>
-  <action>Use SendGrid API to create subuser account with provided email. Request verification email.</action>
-  <verify>API returns 201, account created</verify>
-  <done>Account created, verification email sent</done>
-</task>
-
 <task type="checkpoint:human-action" gate="blocking">
   <action>Complete email verification for SendGrid account</action>
   <instructions>
     I created the account and requested verification email.
-    Check your inbox for SendGrid verification link and click it.
+    Check your inbox for verification link and click it.
   </instructions>
   <verification>SendGrid API key works: curl test succeeds</verification>
-  <resume-signal>Type "done" when email verified</resume-signal>
+  <resume-signal>Type "done" when verified</resume-signal>
 </task>
 ```
 
-**Example: Credit Card 3D Secure**
-```xml
-<task type="auto">
-  <name>Create Stripe payment intent</name>
-  <action>Use Stripe API to create payment intent for $99. Generate checkout URL.</action>
-  <verify>Stripe API returns payment intent ID and URL</verify>
-  <done>Payment intent created</done>
-</task>
-
-<task type="checkpoint:human-action" gate="blocking">
-  <action>Complete 3D Secure authentication</action>
-  <instructions>
-    I created the payment intent: https://checkout.stripe.com/pay/cs_test_abc123
-    Visit that URL and complete the 3D Secure verification flow with your test card.
-  </instructions>
-  <verification>Stripe webhook receives payment_intent.succeeded event</verification>
-  <resume-signal>Type "done" when payment completes</resume-signal>
-</task>
-```
-
-**Example: Authentication Gate (Dynamic Checkpoint)**
-```xml
-<task type="auto">
-  <name>Deploy to Vercel</name>
-  <files>.vercel/, vercel.json</files>
-  <action>Run `vercel --yes` to deploy</action>
-  <verify>vercel ls shows deployment, curl returns 200</verify>
-</task>
-
-<!-- If vercel returns "Error: Not authenticated", LLM creates checkpoint on the fly -->
-
-<task type="checkpoint:human-action" gate="blocking">
-  <action>Authenticate Vercel CLI so I can continue deployment</action>
-  <instructions>
-    I tried to deploy but got authentication error.
-    Run: vercel login
-    This will open your browser - complete the authentication flow.
-  </instructions>
-  <verification>vercel whoami returns your account email</verification>
-  <resume-signal>Type "done" when authenticated</resume-signal>
-</task>
-
-<!-- After authentication, LLM retries the deployment -->
-
-<task type="auto">
-  <name>Retry Vercel deployment</name>
-  <action>Run `vercel --yes` (now authenticated)</action>
-  <verify>vercel ls shows deployment, curl returns 200</verify>
-</task>
-```
-
-**Key distinction:** Authentication gates are created dynamically when LLM encounters auth errors during automation. They're NOT pre-planned - LLM tries to automate first, only asks for credentials when blocked.
-</type>
 </checkpoint_types>
 
 <execution_protocol>
@@ -297,298 +121,167 @@ CHECKPOINT: [Type]
 
 Task [X] of [Y]: [Name]
 
-[Display checkpoint-specific content]
+[Checkpoint-specific content]
 
 [Resume signal instruction]
 ════════════════════════════════════════
 ```
 
 3. **Wait for user response** - do not hallucinate completion
-4. **Verify if possible** - check files, run tests, whatever is specified
-5. **Resume execution** - continue to next task only after confirmation
+4. **Verify if possible** - check files, run tests
+5. **Resume execution** - continue only after confirmation
 
-**For checkpoint:human-verify:**
-```
-════════════════════════════════════════
-CHECKPOINT: Verification Required
-════════════════════════════════════════
-
-Task 5 of 8: Responsive dashboard layout
-
-I built: Responsive dashboard at /dashboard
-
-How to verify:
-1. Run: npm run dev
-2. Visit: http://localhost:3000/dashboard
-3. Test: Resize browser window to mobile/tablet/desktop
-4. Confirm: No layout shift, proper responsive behavior
-
-Type "approved" to continue, or describe issues.
-════════════════════════════════════════
-```
-
-**For checkpoint:decision:**
-```
-════════════════════════════════════════
-CHECKPOINT: Decision Required
-════════════════════════════════════════
-
-Task 2 of 6: Select authentication provider
-
-Decision: Which auth provider should we use?
-
-Context: Need user authentication. Three options with different tradeoffs.
-
-Options:
-1. supabase - Built-in with our DB, free tier
-2. clerk - Best DX, paid after 10k users
-3. nextauth - Self-hosted, maximum control
-
-Select: supabase, clerk, or nextauth
-════════════════════════════════════════
-```
 </execution_protocol>
 
-<writing_guidelines>
+<authentication_gates>
+
+**Critical:** When the LLM tries CLI/API and gets auth error, this is NOT a failure - it's a gate requiring human input to unblock automation.
+
+**Pattern:** LLM tries automation → auth error → creates checkpoint → you authenticate → LLM retries → continues
+
+**Gate protocol:**
+1. Recognize it's not a failure - missing auth is expected
+2. Stop current task - don't retry repeatedly
+3. Create checkpoint:human-action dynamically
+4. Provide exact authentication steps
+5. Verify authentication works
+6. Retry the original task
+7. Continue normally
+
+**Example (Vercel auth gate):**
+```xml
+<!-- LLM tries to deploy -->
+<task type="auto">
+  <name>Deploy to Vercel</name>
+  <action>Run `vercel --yes` to deploy</action>
+</task>
+
+<!-- If vercel returns "Error: Not authenticated" -->
+<task type="checkpoint:human-action" gate="blocking">
+  <action>Authenticate Vercel CLI so I can continue</action>
+  <instructions>
+    I tried to deploy but got authentication error.
+    Run: vercel login (opens browser)
+  </instructions>
+  <verification>vercel whoami returns your account</verification>
+  <resume-signal>Type "done" when authenticated</resume-signal>
+</task>
+
+<!-- After auth, LLM retries automatically -->
+<task type="auto">
+  <name>Retry deployment</name>
+  <action>Run `vercel --yes` (now authenticated)</action>
+</task>
+```
+
+**Key distinction:**
+- Pre-planned checkpoint: "I need you to do X" (wrong - LLM should automate)
+- Auth gate: "I tried to automate X but need credentials" (correct - unblocks automation)
+
+</authentication_gates>
+
+<automation_reference>
+
+**The rule:** If it has CLI/API, the LLM does it. Never ask human to perform automatable work.
+
+| Service | CLI/API | Key Commands | Auth Gate |
+|---------|---------|--------------|-----------|
+| Vercel | `vercel` | `--yes`, `env add`, `--prod`, `ls` | `vercel login` |
+| Railway | `railway` | `init`, `up`, `variables set` | `railway login` |
+| Fly | `fly` | `launch`, `deploy`, `secrets set` | `fly auth login` |
+| Stripe | `stripe` + API | `listen`, `trigger`, API calls | API key in .env |
+| Supabase | `supabase` | `init`, `link`, `db push`, `gen types` | `supabase login` |
+| Upstash | `upstash` | `redis create`, `redis get` | `upstash auth login` |
+| PlanetScale | `pscale` | `database create`, `branch create` | `pscale auth login` |
+| GitHub | `gh` | `repo create`, `pr create`, `secret set` | `gh auth login` |
+| Node | `npm`/`pnpm` | `install`, `run build`, `test` | N/A |
+| Xcode | `xcodebuild` | `-project`, `-scheme`, `build`, `test` | N/A |
+
+**Env files:** Use Write/Edit tools. Never ask human to create .env manually.
+
+**Quick reference:**
+
+| Action | Automatable? | LLM does it? |
+|--------|--------------|--------------|
+| Deploy to Vercel | Yes (`vercel`) | YES |
+| Create Stripe webhook | Yes (API) | YES |
+| Write .env file | Yes (Write tool) | YES |
+| Create Upstash DB | Yes (`upstash`) | YES |
+| Run tests | Yes (`npm test`) | YES |
+| Click email verification link | No | NO |
+| Enter credit card with 3DS | No | NO |
+
+</automation_reference>
+
+<guidelines>
 
 **DO:**
 - Automate everything with CLI/API before checkpoint
 - Be specific: "Visit https://myapp.vercel.app" not "check deployment"
-- Number verification steps: easier to follow
-- State expected outcomes: "You should see X"
-- Provide context: why this checkpoint exists
-- Make verification executable: clear, testable steps
+- Number verification steps
+- State expected outcomes
+- Make verification executable
 
 **DON'T:**
-- Ask human to do work LLM can automate (deploy, create resources, run builds)
-- Assume knowledge: "Configure the usual settings" ❌
-- Skip steps: "Set up database" ❌ (too vague)
-- Mix multiple verifications in one checkpoint (split them)
-- Make verification impossible (LLM can't check visual appearance without user confirmation)
-</writing_guidelines>
+- Ask human to do work the LLM can automate
+- Assume knowledge: "Configure the usual settings"
+- Mix multiple verifications in one checkpoint
+- Use checkpoints too frequently (verification fatigue)
 
-<usage_guidelines>
+**Placement:**
+- After automation completes (not before)
+- After UI buildout
+- Before dependent work (decisions)
+- At integration points
 
-**Use checkpoint:human-verify for:**
-- Visual verification (UI, layouts, animations)
-- Interactive testing (click flows, user journeys)
-- Quality checks (audio/video playback, animation smoothness)
-- Confirming deployed apps are accessible
-
-**Use checkpoint:decision for:**
-- Technology selection (auth providers, databases, frameworks)
-- Architecture choices (monorepo, deployment strategy)
-- Design decisions (color schemes, layout approaches)
-- Feature prioritization
-
-**Use checkpoint:human-action for:**
-- Email verification links (no API)
-- SMS 2FA codes (no API)
-- Manual approvals with no automation
-- 3D Secure payment flows
-
-**Don't use checkpoints for:**
-- Things LLM can verify programmatically (tests pass, build succeeds)
-- File operations (LLM can read files to verify)
-- Code correctness (use tests and static analysis)
-- Anything automatable via CLI/API
-</usage_guidelines>
-
-<placement_guidelines>
-
-Place checkpoints:
-- **After automation completes** - not before LLM does the work
-- **After UI buildout** - before declaring phase complete
-- **Before dependent work** - decisions before implementation
-- **At integration points** - after configuring external services
-
-Bad placement:
-- Before LLM automates (asking human to do automatable work) ❌
-- Too frequent (every other task is a checkpoint) ❌
-- Too late (checkpoint is last task, but earlier tasks needed its result) ❌
-</placement_guidelines>
-
-<examples>
-
-### Example 1: Deployment Flow (Correct)
-
-```xml
-<!-- LLM automates everything -->
-<task type="auto">
-  <name>Deploy to Vercel</name>
-  <files>.vercel/, vercel.json, package.json</files>
-  <action>
-    1. Run `vercel --yes` to create project and deploy
-    2. Capture deployment URL from output
-    3. Set environment variables with `vercel env add`
-    4. Trigger production deployment with `vercel --prod`
-  </action>
-  <verify>
-    - vercel ls shows deployment
-    - curl {url} returns 200
-    - Environment variables set correctly
-  </verify>
-  <done>App deployed to production, URL captured</done>
-</task>
-
-<!-- Human verifies visual/functional correctness -->
-<task type="checkpoint:human-verify" gate="blocking">
-  <what-built>Deployed to https://myapp.vercel.app</what-built>
-  <how-to-verify>
-    Visit https://myapp.vercel.app and confirm:
-    - Homepage loads correctly
-    - All images/assets load
-    - Navigation works
-    - No console errors
-  </how-to-verify>
-  <resume-signal>Type "approved" or describe issues</resume-signal>
-</task>
-```
-
-### Example 2: Database Setup (Correct)
-
-```xml
-<!-- LLM automates everything -->
-<task type="auto">
-  <name>Create Upstash Redis database</name>
-  <files>.env</files>
-  <action>
-    1. Run `upstash redis create myapp-cache --region us-east-1`
-    2. Capture connection URL from output
-    3. Write to .env: UPSTASH_REDIS_URL={url}
-    4. Verify connection with test command
-  </action>
-  <verify>
-    - upstash redis list shows database
-    - .env contains UPSTASH_REDIS_URL
-    - Test connection succeeds
-  </verify>
-  <done>Redis database created and configured</done>
-</task>
-
-<!-- NO CHECKPOINT NEEDED - LLM automated everything and verified programmatically -->
-```
-
-### Example 3: Stripe Webhooks (Correct)
-
-```xml
-<!-- LLM automates everything -->
-<task type="auto">
-  <name>Configure Stripe webhooks</name>
-  <files>.env, src/app/api/webhooks/route.ts</files>
-  <action>
-    1. Use Stripe API to create webhook endpoint pointing to /api/webhooks
-    2. Subscribe to events: payment_intent.succeeded, customer.subscription.updated
-    3. Save webhook signing secret to .env
-    4. Implement webhook handler in route.ts
-  </action>
-  <verify>
-    - Stripe API returns webhook endpoint ID
-    - .env contains STRIPE_WEBHOOK_SECRET
-    - curl webhook endpoint returns 200
-  </verify>
-  <done>Stripe webhooks configured and handler implemented</done>
-</task>
-
-<!-- Human verifies in Stripe dashboard -->
-<task type="checkpoint:human-verify" gate="blocking">
-  <what-built>Stripe webhook configured via API</what-built>
-  <how-to-verify>
-    Visit Stripe Dashboard > Developers > Webhooks
-    Confirm: Endpoint shows https://myapp.com/api/webhooks with correct events
-  </how-to-verify>
-  <resume-signal>Type "yes" if correct</resume-signal>
-</task>
-```
-</examples>
+</guidelines>
 
 <anti_patterns>
 
-### ❌ BAD: Asking human to automate
-
+**BAD: Asking human to automate**
 ```xml
-<task type="checkpoint:human-action" gate="blocking">
+<task type="checkpoint:human-action">
   <action>Deploy to Vercel</action>
-  <instructions>
-    1. Visit vercel.com/new
-    2. Import Git repository
-    3. Click Deploy
-    4. Copy deployment URL
-  </instructions>
-  <verification>Deployment exists</verification>
-  <resume-signal>Paste URL</resume-signal>
+  <instructions>Visit vercel.com/new, import repo, click Deploy</instructions>
 </task>
 ```
+Why bad: Vercel has CLI. Use `vercel --yes`.
 
-**Why bad:** Vercel has a CLI. LLM should run `vercel --yes`.
-
-### ✅ GOOD: LLM automates, human verifies
-
-```xml
-<task type="auto">
-  <name>Deploy to Vercel</name>
-  <action>Run `vercel --yes`. Capture URL.</action>
-  <verify>vercel ls shows deployment, curl returns 200</verify>
-</task>
-
-<task type="checkpoint:human-verify">
-  <what-built>Deployed to {url}</what-built>
-  <how-to-verify>Visit {url}, check homepage loads</how-to-verify>
-  <resume-signal>Type "approved"</resume-signal>
-</task>
-```
-
-### ❌ BAD: Too many checkpoints
-
+**BAD: Too many checkpoints**
 ```xml
 <task type="auto">Create schema</task>
 <task type="checkpoint:human-verify">Check schema</task>
-<task type="auto">Create API route</task>
+<task type="auto">Create API</task>
 <task type="checkpoint:human-verify">Check API</task>
-<task type="auto">Create UI form</task>
-<task type="checkpoint:human-verify">Check form</task>
 ```
+Why bad: Verification fatigue. Combine into one checkpoint at end.
 
-**Why bad:** Verification fatigue. Combine into one checkpoint at end.
-
-### ✅ GOOD: Single verification checkpoint
-
+**GOOD: LLM automates, human verifies once**
 ```xml
 <task type="auto">Create schema</task>
-<task type="auto">Create API route</task>
-<task type="auto">Create UI form</task>
+<task type="auto">Create API</task>
+<task type="auto">Create UI</task>
 
 <task type="checkpoint:human-verify">
-  <what-built>Complete auth flow (schema + API + UI)</what-built>
+  <what-built>Complete auth flow</what-built>
   <how-to-verify>Test full flow: register, login, access protected page</how-to-verify>
-  <resume-signal>Type "approved"</resume-signal>
 </task>
 ```
 
-### ❌ BAD: Asking for automatable file operations
-
-```xml
-<task type="checkpoint:human-action">
-  <action>Create .env file</action>
-  <instructions>
-    1. Create .env in project root
-    2. Add: DATABASE_URL=...
-    3. Add: STRIPE_KEY=...
-  </instructions>
-</task>
-```
-
-**Why bad:** LLM has Write tool. This should be `type="auto"`.
 </anti_patterns>
 
 <summary>
 
-Checkpoints formalize human-in-the-loop points. Use them when LLM cannot complete a task autonomously OR when human verification is required for correctness.
-
 **The golden rule:** If the LLM CAN automate it, the LLM MUST automate it.
 
 **Checkpoint priority:**
-1. **checkpoint:human-verify** (90% of checkpoints) - LLM automated everything, human confirms visual/functional correctness
-2. **checkpoint:decision** (9% of checkpoints) - Human makes architectural/technology choices
-3. **checkpoint:human-action** (1% of checkpoints) - Truly unavoidable manual steps with no API/CLI
+1. **checkpoint:human-verify** (90%) - LLM automated, human confirms visual/functional correctness
+2. **checkpoint:decision** (9%) - Human makes architectural/technology choices
+3. **checkpoint:human-action** (1%) - Truly unavoidable manual steps with no API/CLI
+
+**When NOT to use checkpoints:**
+- Things the LLM can verify programmatically (tests, builds)
+- File operations (LLM can read/write)
+- Anything with CLI/API available
+
 </summary>

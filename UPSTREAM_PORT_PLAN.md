@@ -315,3 +315,279 @@ Recommended: 1 → 5 → 4 → 6 → 2 → 3 → 7
 ### Skipped
 
 - `a990e37`, `5e496e7`, `8ebae04` - Version bump commits (package.json only)
+
+---
+
+## Sync: 2025-12-29
+
+**Upstream range:** `8ebae04` (v1.3.8, Dec 18) → `51f3950` (v1.3.13, Dec 29)
+
+### Upstream Commits (16 total)
+
+| Commit | Date | Description | Port? |
+|--------|------|-------------|-------|
+| `51f3950` | Dec 29 | 1.3.13 | Skip (version bump) |
+| `86878b9` | Dec 29 | fix: restore deterministic bash commands, remove redundant decision_gate | **Port** |
+| `9164faa` | Dec 29 | 1.3.12 | Skip (version bump) |
+| `1609618` | Dec 29 | revert: restore plan-format.md - output template, not instructional | Review |
+| `1de0dda` | Dec 29 | 1.3.11 - 70% context reduction for plan-phase | Skip (version bump) |
+| `df1f138` | Dec 29 | feat(04-02): 70% context reduction for plan-phase | **Port** |
+| `5d16432` | Dec 29 | feat(04-01): merge cli-automation into checkpoints, compress plan-format | **Port** |
+| `d6913f3` | Dec 29 | 1.3.10 | Skip (version bump) |
+| `f24203d` | Dec 29 | fix: explicit plan count check in offer_next step | **Port** |
+| `fe48ea5` | Dec 27 | 1.3.9 | Skip (version bump) |
+| `31597a9` | Dec 27 | feat: evolutionary PROJECT.md system | **Port** |
+| `8ebae04` | Dec 18 | 1.3.8 | Already synced |
+| `00623e5` | Dec 18 | docs: add brownfield/existing projects section to README | Already synced |
+| `5e496e7` | Dec 18 | 1.3.7 | Already synced |
+| `c11b744` | Dec 18 | fix: improve incremental codebase map updates | Already synced |
+| `a990e37` | Dec 18 | 1.3.6 | Already synced |
+| `b1f9d57` | Dec 18 | feat: add file paths to codebase mapping output | Already synced |
+
+---
+
+## Port Plan: Phase 8 - Context Reduction & Evolutionary PROJECT.md
+
+### Overview
+
+This sync introduces two major changes:
+1. **70% context reduction** - Merging/compressing reference docs to reduce plan context overhead
+2. **Evolutionary PROJECT.md** - Requirements tracking that evolves as you ship
+
+### Phase 8.1: Merge cli-automation.md into checkpoints.md
+
+**Priority:** HIGH  
+**Upstream:** `5d16432`  
+**Context savings:** ~500 lines
+
+**Rationale:** `cli-automation.md` (528 lines) and `checkpoints.md` (595 lines) have significant overlap. Upstream merged them into a single file.
+
+**Files to modify:**
+- [x] `gsd/references/checkpoints.md` - Add compact `<automation_reference>` section from cli-automation.md
+- [x] Delete `gsd/references/cli-automation.md`
+- [x] `gsd/workflows/plan-phase.md` - Remove cli-automation.md from required_reading (not present)
+- [x] `gsd/workflows/execute-phase.md` - Update any cli-automation.md references (not present)
+- [x] `command/gsd/plan-phase.md` - Remove cli-automation.md reference if present
+
+**Merge strategy:**
+1. Keep full checkpoint type documentation (human-verify, decision, human-action)
+2. Add compressed `<automation_reference>` with:
+   - Quick reference table (CLI/API → automate, no API → checkpoint)
+   - Authentication gate pattern (single example)
+   - Decision tree (simplified)
+3. Remove redundant examples that duplicate checkpoint examples
+
+---
+
+### Phase 8.2: Compress scope-estimation.md
+
+**Priority:** HIGH  
+**Upstream:** `5d16432`, `df1f138`  
+**Context savings:** ~370 lines (485 → ~115)
+
+**Rationale:** Verbose explanations replaced with tables. Core concepts preserved.
+
+**Files to modify:**
+- [x] `gsd/references/scope-estimation.md` - Full rewrite with compressed format
+
+**Compression targets:**
+| Section | Before | After |
+|---------|--------|-------|
+| Quality degradation curve | 30 lines prose | 8 line table |
+| Context target | 15 lines explanation | 5 lines |
+| Task rule | 40 lines examples | 15 line table |
+| Split signals | 60 lines | 20 lines bullets |
+| Splitting strategies | 80 lines examples | Remove (covered in plan-phase) |
+| Anti-patterns | 70 lines | 20 lines (keep 2 examples) |
+| Estimating context | 30 lines | 10 line table |
+| Summary | 20 lines | 5 lines |
+
+**Key content to preserve:**
+- 2-3 task rule with 50% context target
+- Quality degradation curve concept
+- Split signals list
+- Autonomous vs interactive distinction
+
+---
+
+### Phase 8.3: Workflow Updates (plan-phase.md)
+
+**Priority:** MEDIUM  
+**Upstream:** `86878b9`, `df1f138`
+
+**Changes:**
+- [ ] Remove redundant `decision_gate` step (confirm_breakdown already handles this)
+- [ ] Add explicit bash commands for deterministic file checks:
+  - `ls .planning/codebase/*.md 2>/dev/null`
+  - `cat .planning/ROADMAP.md`
+  - `ls .planning/phases/`
+  - `ls .planning/phases/*/*-SUMMARY.md 2>/dev/null | sort`
+  - `cat .planning/ISSUES.md 2>/dev/null`
+  - `ls -la src/ 2>/dev/null` and `cat package.json 2>/dev/null | head -20`
+
+**Files to modify:**
+- [ ] `gsd/workflows/plan-phase.md`
+
+---
+
+### Phase 8.4: Workflow Updates (execute-phase.md)
+
+**Priority:** MEDIUM  
+**Upstream:** `f24203d`
+
+**Changes:**
+- [ ] Add explicit plan count check in `offer_next` step
+
+**Add this bash block:**
+```bash
+# Get current phase directory from the plan we just executed
+PHASE_DIR=$(dirname "$PLAN_PATH")
+
+# Count PLAN files vs SUMMARY files
+PLAN_COUNT=$(ls "$PHASE_DIR"/*-PLAN.md 2>/dev/null | wc -l | tr -d ' ')
+SUMMARY_COUNT=$(ls "$PHASE_DIR"/*-SUMMARY.md 2>/dev/null | wc -l | tr -d ' ')
+
+echo "Plans: $PLAN_COUNT, Summaries: $SUMMARY_COUNT"
+
+if [[ $SUMMARY_COUNT -lt $PLAN_COUNT ]]; then
+  echo "MORE_PLANS_EXIST"
+else
+  echo "PHASE_COMPLETE"
+fi
+```
+
+**Files to modify:**
+- [ ] `gsd/workflows/execute-phase.md` - Update offer_next step
+
+---
+
+### Phase 8.5: Evolutionary PROJECT.md System
+
+**Priority:** MEDIUM  
+**Upstream:** `31597a9`
+
+**Concept:** PROJECT.md evolves from static init document to living requirements tracker.
+
+**New structure:**
+```markdown
+# Project Name
+
+## What This Is
+[Current accurate description - updated when reality drifts]
+
+## Core Value  
+[The ONE thing. If everything else fails, this must work.]
+
+## Requirements
+
+### Validated
+<!-- Shipped and confirmed valuable -->
+- ✓ Feature — vX.Y
+
+### Active
+<!-- Current hypotheses -->
+- [ ] Feature
+
+### Out of Scope
+<!-- With reasoning -->
+- Feature — reason
+
+## Key Decisions
+| Decision | Rationale | Outcome |
+|----------|-----------|---------|
+| Choice | Why | ✓ Good / ⚠️ Revisit / — Pending |
+
+## Context
+[Background, constraints, prior art]
+
+*Last updated: YYYY-MM-DD after [trigger]*
+```
+
+**Files to modify:**
+- [ ] `gsd/templates/project.md` - Replace with evolutionary template
+- [ ] `gsd/templates/state.md` - Update to reference PROJECT.md instead of copying summary
+- [ ] `gsd/workflows/complete-milestone.md` - Add `evolve_project_full_review` step
+
+**STATE.md changes:**
+- "Project Summary" (immutable copy) → "Project Reference" (pointer to PROJECT.md)
+- 150 lines → 100 lines target
+- Remove "Project Alignment" section (now tracked in PROJECT.md Key Decisions)
+
+---
+
+### Phase 8.6: Codebase Template File Paths
+
+**Priority:** LOW (may already be done)  
+**Upstream:** `b1f9d57` (already synced, but verify all templates)
+
+**Verify these templates have file path guidance:**
+- [ ] `gsd/templates/codebase/architecture.md` - Location fields with backticks
+- [ ] `gsd/templates/codebase/concerns.md` - Files field required
+- [ ] `gsd/templates/codebase/stack.md` - Backtick formatting
+- [ ] `gsd/templates/codebase/structure.md` - Backtick formatting
+- [ ] `gsd/templates/codebase/conventions.md` - File path examples
+- [ ] `gsd/templates/codebase/integrations.md` - File path examples
+- [ ] `gsd/templates/codebase/testing.md` - File path examples
+
+---
+
+### Phase 8.7: Update AGENTS.md
+
+**Priority:** LOW
+
+**Files to modify:**
+- [ ] `AGENTS.md` - Update "Last synced" to `51f3950` (v1.3.13, Dec 29)
+
+---
+
+## Execution Order
+
+Recommended sequence to minimize conflicts:
+
+1. **8.1** - Merge cli-automation into checkpoints (biggest context win)
+2. **8.2** - Compress scope-estimation (second biggest win)
+3. **8.3** - plan-phase.md workflow updates (depends on 8.1)
+4. **8.4** - execute-phase.md plan count fix (independent)
+5. **8.5** - Evolutionary PROJECT.md (independent, most complex)
+6. **8.6** - Verify codebase templates (quick check)
+7. **8.7** - Update AGENTS.md (final step)
+
+---
+
+## Testing After Port
+
+After completing the port:
+
+1. **Install changes:**
+   ```bash
+   echo "1" | node bin/install.js --force
+   ```
+
+2. **Test plan-phase workflow:**
+   - Run `/gsd/plan-phase` on a test project
+   - Verify reduced context (check if cli-automation.md no longer loaded)
+   - Verify bash commands execute correctly
+
+3. **Test execute-phase workflow:**
+   - Run `/gsd/execute-plan` on a multi-plan phase
+   - Verify plan count check works correctly
+
+4. **Test PROJECT.md evolution:**
+   - Run `/gsd/complete-milestone` 
+   - Verify PROJECT.md gets the new structure
+
+---
+
+## OpenCode-Specific Considerations
+
+**Keep these OpenCode adaptations:**
+- `~/.config/opencode/gsd/` paths (not `~/.claude/`)
+- "LLM" terminology (not "Claude")
+- Task tool for subagents (not implicit spawning)
+- `todowrite`/`todoread` integration in STATE.md template
+- Context7 MCP references for research
+
+**Don't port:**
+- Claude Code specific frontmatter (`allowed-tools:`, `argument-hint:`)
+- `AskUserQuestion`, `SlashCommand`, `TaskOutput` tool references
+- Version bumps to package.json

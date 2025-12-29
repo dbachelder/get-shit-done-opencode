@@ -15,7 +15,6 @@ Output: One or more PLAN.md files in the phase directory (.planning/phases/XX-na
 @{{GSD_PATH}}/references/plan-format.md
 @{{GSD_PATH}}/references/scope-estimation.md
 @{{GSD_PATH}}/references/checkpoints.md
-@{{GSD_PATH}}/references/cli-automation.md
 </execution_context>
 
 <context>

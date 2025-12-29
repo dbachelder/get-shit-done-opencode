@@ -73,19 +73,26 @@ Avoid `<sub>`, `<sup>`, or other HTML in output - use markdown or plain text.
 ## Upstream Sync
 
 **Upstream repo:** https://github.com/glittercowboy/get-shit-done
-**Last synced:** 2025-12-17
-**Synced through:** commit `e409c7f`
+**Last synced:** 2025-12-29
+**Synced through:** commit `51f3950` (v1.3.13)
 
 When porting upstream changes:
 1. Check UPSTREAM_PORT_PLAN.md for mapping
 2. Adapt Claude-specific patterns to OpenCode
-3. Update AGENTS.sample.md with sync info
+3. Update this file with sync info
 
 ## Current Work
+
+### In Progress (Phase 8 of UPSTREAM_PORT_PLAN.md)
+- Phase 8.1: Merged cli-automation.md into checkpoints.md (DONE)
+- Phase 8.2: Compressed scope-estimation.md (DONE)
+- Phase 8.3-8.7: Remaining workflow updates and PROJECT.md evolution
 
 ### Recently Added
 - `/gsd/add-issue` - Quick issue capture during execution
 - Fixed progress table rendering (plain text instead of markdown pipes)
+- Context reduction: checkpoints.md now includes automation reference (~70% smaller combined)
+- Context reduction: scope-estimation.md compressed (~75% smaller)
 
 ### Known Issues
 - None currently tracked
