@@ -94,6 +94,7 @@ All Phase 8 tasks complete:
 - Phase 8.7: Updated sync info
 
 ### Recently Added
+- **plan-phase/research-phase separation** - Added explicit guard to prevent plan-phase from drifting into research mode
 - Evolutionary PROJECT.md - requirements tracking that evolves as you ship
 - STATE.md now references PROJECT.md instead of copying immutable summary
 - `/gsd/complete-milestone` now includes `evolve_project_full_review` step

@@ -188,6 +188,9 @@ Read any existing PLAN.md or DISCOVERY.md in the phase directory.
 
 The LLM's training data is 6-18 months stale. Treat pre-existing knowledge as hypothesis, not fact.
 
+**CRITICAL: This is plan-phase, NOT research-phase.**
+Discovery here is LIMITED to quick verification (Level 0-1). If Level 2-3 research is needed and no RESEARCH.md exists, recommend the user run `/gsd/research-phase` first and STOP - do not begin extensive research within plan-phase.
+
 <discovery_decision_tree>
 
 ```
@@ -255,35 +258,26 @@ Action:
 2. Verify current version/API matches expectations
 3. No DISCOVERY.md needed - proceed with confirmed knowledge
 
-**LEVEL 2 - Standard Research (15-30 min):**
-Use when:
+**LEVEL 2 or 3 - Extensive Research Needed:**
+Indicators:
 
 - Choosing between 2-3 options
 - New external integration (API, service)
-- Medium-risk decision
-
-Action:
-
-1. Route to workflows/discovery-phase.md with depth=standard
-2. Produces DISCOVERY.md with recommendation
-3. Return here after DISCOVERY.md created
-
-**LEVEL 3 - Deep Dive (1+ hour):**
-Use when:
-
 - Architectural decision with long-term impact
 - Novel problem without clear patterns
-- High-risk, hard to change later
-- Multiple interacting systems
+- Niche/complex domains (3D, games, audio, shaders, ML)
 
-Action:
+**Action: STOP and recommend research-phase.**
 
-1. Route to workflows/discovery-phase.md with depth=deep
-2. Full discovery with cross-verification
-3. DISCOVERY.md with detailed rationale and validation checkpoints
-4. Return here after DISCOVERY.md created
+```
+This phase requires research before planning can proceed.
 
-**NOTE:** For niche/complex domains (3D, games, audio, shaders, ML), consider using `/gsd/research-phase` BEFORE plan-phase. This produces comprehensive RESEARCH.md with ecosystem knowledge that goes beyond "which library" to "how do experts build this."
+No RESEARCH.md found for Phase [X].
+
+Run `/gsd/research-phase [X]` first, then return to planning.
+```
+
+Do NOT begin extensive research within plan-phase. Exit and let the user invoke the appropriate workflow.
 
 ```
 </discovery_decision_tree>
