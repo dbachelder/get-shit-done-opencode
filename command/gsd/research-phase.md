@@ -44,14 +44,14 @@ Check for `.planning/phases/XX-name/{phase}-CONTEXT.md` - bonus context from dis
    - Analyze phase to identify knowledge gaps
    - Determine research domains (architecture, ecosystem, patterns, pitfalls)
    - Execute comprehensive research via Context7 MCP, official docs
+   - Cross-verify all findings
 
 For documentation lookups, use Context7 MCP:
 1. mcp__context7__resolve-library-id with libraryName
 2. mcp__context7__get-library-docs with the resolved ID
 
-   - Cross-verify all findings
-   - Create RESEARCH.md with actionable ecosystem knowledge
-6. Present the "What's next?" menu and STOP. Wait for user to explicitly choose an option before proceeding. Do NOT continue to planning or implementation.
+6. **WRITE the RESEARCH.md file** - Do NOT just present findings inline. You MUST write `.planning/phases/XX-name/{phase}-RESEARCH.md` using the template.
+7. Present the "What's next?" menu and STOP. Wait for user to explicitly choose an option before proceeding. Do NOT continue to planning or implementation.
 </process>
 
 <when_to_use>

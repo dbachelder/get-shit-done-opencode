@@ -94,6 +94,7 @@ All Phase 8 tasks complete:
 - Phase 8.7: Updated sync info
 
 ### Recently Added
+- **research-phase file write enforcement** - Made RESEARCH.md file creation mandatory with explicit "ACTION REQUIRED" language; LLM was presenting findings inline instead of writing to file
 - **plan-phase/research-phase separation** - Added explicit guard to prevent plan-phase from drifting into research mode
 - Evolutionary PROJECT.md - requirements tracking that evolves as you ship
 - STATE.md now references PROJECT.md instead of copying immutable summary

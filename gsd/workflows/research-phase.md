@@ -308,16 +308,16 @@ Before creating RESEARCH.md, run through research-pitfalls.md checklist:
 </step>
 
 <step name="write_research">
-Create RESEARCH.md using accumulated findings.
+**ACTION REQUIRED: Write the RESEARCH.md file NOW.**
+
+Do NOT just present findings inline - you MUST write them to a file.
 
 **File location:** `.planning/phases/${PHASE}-${SLUG}/${PHASE}-RESEARCH.md`
 
 **If phase directory doesn't exist:**
-Create it: `.planning/phases/${PHASE}-${SLUG}/`
+Create it first: `.planning/phases/${PHASE}-${SLUG}/`
 
 Use template from ~/.config/opencode/gsd/templates/research.md
-
-Populate sections with verified findings from research execution.
 
 **Critical content requirements:**
 
@@ -346,7 +346,7 @@ Populate sections with verified findings from research execution.
 - Show the "right way" to do common operations
 - Note any gotchas in the examples
 
-Write file.
+**WRITE THE FILE NOW before proceeding to confirm_creation.**
 </step>
 
 <step name="confirm_creation">
