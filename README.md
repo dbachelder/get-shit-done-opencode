@@ -1,9 +1,14 @@
 # THIS PROJECT IS DEAD!
 
-I contributed the --opencode flag to GSD proper, just use that! it's way better.
+## I contributed the --opencode flag to GSD proper, just use that! it's way better.
 
 
+---
+---
 
+---
+
+---
 
 # GSD - OpenCode Edition
 
